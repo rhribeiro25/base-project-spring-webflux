@@ -1,2 +1,2 @@
 # base-project-spring-webflux
-Spring Boot, Spring WebFlux, Reactor, WebClient, Clean Architecture.
+Spring Boot, Spring WebFlux, Reactor, WebClient e Clean Architecture.
