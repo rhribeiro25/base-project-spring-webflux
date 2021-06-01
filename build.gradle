@@ -7,7 +7,7 @@ plugins {
 
 group = 'br.com.rhribeiro25'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '15'
+sourceCompatibility = '11'
 
 configurations {
     compileOnly {
@@ -81,10 +81,4 @@ test {
         includeEngines 'junit-jupiter', 'junit-vintage'
     }
     finalizedBy jacocoTestReport
-}
-
-tasks.withType(Test).all {
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_15)) {
-        jvmArgs += ["-XX:+AllowRedefinitionToAddDeleteMethods"]
-    }
 }
