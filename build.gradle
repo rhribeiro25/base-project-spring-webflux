@@ -24,21 +24,23 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-devtools'
+    // Apache Commons Validator
+    implementation 'commons-validator:commons-validator:1.7'
     // Context
     implementation 'org.springframework:spring-context'
     implementation 'org.springframework:spring-context-support:4.3.10.RELEASE'
-    // Apache Commons Validator
-    implementation 'commons-validator:commons-validator:1.7'
+    // Reactor project
+    implementation 'io.projectreactor:reactor-tools'
+    implementation 'io.projectreactor:reactor-core'
+    // Openapi
+    implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.5.2'
+    // Lombok project
+    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
     // JAXB API
     implementation('javax.xml.bind:jaxb-api:2.3.0')
     implementation('javax.activation:activation:1.1')
     implementation('org.glassfish.jaxb:jaxb-runtime:2.3.0')
-	// Reactor project
-    implementation 'io.projectreactor:reactor-tools'
-    implementation 'io.projectreactor:reactor-core'
-    // Lombok project
-    annotationProcessor 'org.projectlombok:lombok'
-    compileOnly 'org.projectlombok:lombok'
     // Test dependencies
     implementation platform('io.projectreactor:reactor-bom:2020.0.2')
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -51,6 +53,7 @@ dependencies {
     testImplementation "org.mock-server:mockserver-spring-test-listener:5.11.2"
     testRuntimeOnly "org.junit.vintage:junit-vintage-engine"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+
 }
 
 check.dependsOn jacocoTestCoverageVerification

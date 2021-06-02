@@ -13,7 +13,7 @@ public class BaseProjectSpringWebfluxApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BaseProjectSpringWebfluxApplication.class, args);
-		System.out.println("🚀 Server ready at http://localhost:8080/api");
+		System.out.println("🚀 Server ready at http://localhost:9090/api");
 	}
 
 }
