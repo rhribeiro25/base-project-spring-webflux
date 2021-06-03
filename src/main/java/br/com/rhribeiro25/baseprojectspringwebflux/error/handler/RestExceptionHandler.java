@@ -6,6 +6,8 @@ import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.BadRequestErr
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.InternalServerErrorException;
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.NotFoundErrorException;
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.UnauthorizedErrorException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -18,9 +20,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.webjars.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Class Rest Exception Handler
@@ -35,8 +35,14 @@ public class RestExceptionHandler {
     @Autowired
     private MessageSource messageSource;
 
+    private ObjectMapper mapper;
+
+    public RestExceptionHandler() {
+        mapper = new ObjectMapper();
+    }
+
     @ExceptionHandler(WebClientResponseException.BadRequest.class)
-    public ResponseEntity<?> handlerBadRequestException(WebClientResponseException ex) {
+    public ResponseEntity<?> handlerBadRequestException(WebClientResponseException ex) throws JsonProcessingException {
         Error error = Error.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .error(ErrorDetails.builder()
@@ -45,11 +51,12 @@ public class RestExceptionHandler {
                         .time(new Date().getTime())
                         .build())
                 .build();
+        log.error(mapper.writeValueAsString(error));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<?> handlerNotFoundException(NotFoundException ex) {
+    public ResponseEntity<?> handlerNotFoundException(NotFoundException ex) throws JsonProcessingException {
         Error error = Error.builder()
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .error(ErrorDetails.builder()
@@ -58,11 +65,12 @@ public class RestExceptionHandler {
                         .time(new Date().getTime())
                         .build())
                 .build();
+        log.error(mapper.writeValueAsString(error));
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
-    public ResponseEntity<?> handlerInternalServerErrorException(InternalServerErrorException ex) {
+    public ResponseEntity<?> handlerInternalServerErrorException(InternalServerErrorException ex) throws JsonProcessingException {
         String msg =  messageSource.getMessage("message.internal.error", null, Locale.getDefault());
         Error error = Error.builder()
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
@@ -72,11 +80,12 @@ public class RestExceptionHandler {
                         .time(new Date().getTime())
                         .build())
                 .build();
+        log.error(mapper.writeValueAsString(error));
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<?> handlerConstraintViolationException(ConstraintViolationException ex) {
+    public ResponseEntity<?> handlerConstraintViolationException(ConstraintViolationException ex) throws JsonProcessingException {
         List<ParamErrorDetails> params = ValidationError.getParamErrorDetails(ex);
         String msg =  messageSource.getMessage("message.error.param", null, Locale.getDefault());
         Error error = Error.builder()
@@ -88,11 +97,12 @@ public class RestExceptionHandler {
                         .build())
                 .params(params)
                 .build();
+        log.error(mapper.writeValueAsString(error));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotFoundErrorException.class)
-    public ResponseEntity<?> handlerNotFoundServerErrorException(NotFoundErrorException ex) {
+    public ResponseEntity<?> handlerNotFoundServerErrorException(NotFoundErrorException ex) throws JsonProcessingException {
         Error error = Error.builder()
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .error(ErrorDetails.builder()
@@ -101,10 +111,12 @@ public class RestExceptionHandler {
                         .time(new Date().getTime())
                         .build())
                 .build();
+        log.error(mapper.writeValueAsString(error));
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(BadRequestErrorException.class)
-    public ResponseEntity<?> handlerBadRequestErrorException(BadRequestErrorException ex) {
+    public ResponseEntity<?> handlerBadRequestErrorException(BadRequestErrorException ex) throws JsonProcessingException {
         Error error = Error.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .error(ErrorDetails.builder()
@@ -113,11 +125,12 @@ public class RestExceptionHandler {
                         .time(new Date().getTime())
                         .build())
                 .build();
+        log.error(mapper.writeValueAsString(error));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = {WebExchangeBindException.class})
-    public ResponseEntity<Object> handleJacksonError(WebExchangeBindException ex) {
+    public ResponseEntity<Object> handleJacksonError(WebExchangeBindException ex) throws JsonProcessingException {
         List<ParamErrorDetails> params = ValidationError.getParamErrorDetails(ex);
         String msg =  messageSource.getMessage("message.error.param", null, Locale.getDefault());
         Error error = Error.builder()
@@ -129,11 +142,12 @@ public class RestExceptionHandler {
                         .build())
                 .params(params)
                 .build();
+        log.error(mapper.writeValueAsString(error));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UnauthorizedErrorException.class)
-    public ResponseEntity<?> handlerBadRequestErrorException(UnauthorizedErrorException ex) {
+    public ResponseEntity<?> handlerBadRequestErrorException(UnauthorizedErrorException ex) throws JsonProcessingException {
         Error error = Error.builder()
                 .statusCode(HttpStatus.UNAUTHORIZED.value())
                 .error(ErrorDetails.builder()
@@ -142,6 +156,7 @@ public class RestExceptionHandler {
                         .time(new Date().getTime())
                         .build())
                 .build();
+        log.error(mapper.writeValueAsString(error));
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 

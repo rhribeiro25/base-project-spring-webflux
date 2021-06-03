@@ -10,9 +10,8 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+    compileOnly { extendsFrom annotationProcessor }
+    all { exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging' }
 }
 
 repositories {
@@ -23,6 +22,8 @@ dependencies {
     // Spring projects
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-devtools'
     // Apache Commons Validator
     implementation 'commons-validator:commons-validator:1.7'

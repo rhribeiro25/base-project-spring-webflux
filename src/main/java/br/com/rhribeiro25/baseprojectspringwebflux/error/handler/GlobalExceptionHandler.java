@@ -71,6 +71,7 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
                         .message(msg)
                         .name(HttpStatus.valueOf(status).name()).time(new Date().getTime()).build())
                 .build();
+        log.error(error.getError().getMessage());
         return ServerResponse
             .status(status)
             .contentType(MediaType.APPLICATION_JSON)
