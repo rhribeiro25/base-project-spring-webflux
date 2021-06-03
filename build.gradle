@@ -39,8 +39,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     // JAXB API
     implementation('javax.xml.bind:jaxb-api:2.3.0')
-    implementation('javax.activation:activation:1.1')
-    implementation('org.glassfish.jaxb:jaxb-runtime:2.3.0')
     // Test dependencies
     implementation platform('io.projectreactor:reactor-bom:2020.0.2')
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

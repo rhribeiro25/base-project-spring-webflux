@@ -52,14 +52,6 @@ public class AddressWebClient {
                         .build(cep))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .onStatus(HttpStatus::is4xxClientError, response -> {
-                    System.out.println(response);
-                    return Mono.empty();
-                })
-                .onStatus(HttpStatus::is5xxServerError, response -> {
-                    System.out.println(response);
-                    return Mono.empty();
-                })
                 .bodyToMono(AddressResponse.class);
         return dpExamPreparationsResponse;
     }
