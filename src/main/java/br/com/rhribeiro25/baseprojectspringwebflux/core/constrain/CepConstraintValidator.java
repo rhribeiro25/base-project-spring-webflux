@@ -22,7 +22,8 @@ public class CepConstraintValidator implements ConstraintValidator<CepConstraint
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
 
-        if(validRegistryNumber(context, (value == null || value.isBlank()), "{message.error.cep.not.blank}")) return false;
+        if (validRegistryNumber(context, (value == null || value.isBlank()), "{message.error.cep.not.blank}"))
+            return false;
 
         if (validRegistryNumber(context, value.trim().length() > 9, "{message.error.cep.max.size}")) return false;
 

@@ -8,6 +8,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+/**
+ * Class Address Controller
+ *
+ * @author Renan Henrique Ribeiro
+ * @since 06/07/2021
+ */
 @RestController
 @RequestMapping("api/addresses")
 @Validated

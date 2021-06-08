@@ -1,12 +1,12 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viaCep;
+package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viacep;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viaCep.dtos.response.AddressResponse;
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.interfaces.viacep.AddressConverter;
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viacep.dtos.response.VcAddressResponse;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
@@ -17,6 +17,12 @@ import reactor.netty.http.client.HttpClient;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Class Address WebClient
+ *
+ * @author Renan Henrique Ribeiro
+ * @since 06/07/2021
+ */
 @Component
 public class AddressWebClient {
 
@@ -46,13 +52,13 @@ public class AddressWebClient {
     }
 
     public Mono findAddressByZipcode(String cep) {
-        Mono<AddressResponse> dpExamPreparationsResponse = webClient.get()
+        Mono<VcAddressResponse> dpExamPreparationsResponse = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("ws/{cep}/json")
                         .build(cep))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(AddressResponse.class);
-        return dpExamPreparationsResponse;
+                .bodyToMono(VcAddressResponse.class);
+        return AddressConverter.converterDpHospitalResponseToObjectResponse(dpExamPreparationsResponse);
     }
 }
