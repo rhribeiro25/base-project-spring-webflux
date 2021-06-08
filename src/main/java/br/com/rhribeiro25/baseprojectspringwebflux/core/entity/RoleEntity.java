@@ -1,6 +1,5 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.entity;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.core.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +17,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RoleEntity {
     private Long id;
-    private RoleType type;
+    private String name;
+    private String description;
 }
