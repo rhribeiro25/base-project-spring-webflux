@@ -23,6 +23,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table("users")
 public class UserEntity {
     @Id
     private Long id;
@@ -50,6 +51,7 @@ public class UserEntity {
     @LastModifiedDate
     private Date updatedAt;
 
+    @Column
     private RoleEntity role;
 
     private Set<PhoneEntity> phones;
