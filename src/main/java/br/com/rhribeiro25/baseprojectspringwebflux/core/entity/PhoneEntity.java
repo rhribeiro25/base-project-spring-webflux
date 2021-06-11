@@ -6,9 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
-
-import java.util.Set;
 
 /**
  * Class Phone Entity
@@ -20,11 +19,11 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table("phone_table")
+@Table("phones")
 public class PhoneEntity {
     @Id
     private Long id;
     private String ddd;
-    private String number;
-    private PhoneType type;
+    private String num;
+    private PhoneType phoneType;
 }

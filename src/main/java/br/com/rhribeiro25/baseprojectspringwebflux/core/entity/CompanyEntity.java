@@ -1,10 +1,12 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.Set;
@@ -19,12 +21,13 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table("company_table")
+@Table("companies")
 public class CompanyEntity {
     @Id
     private Long id;
     private String name;
     private AddressEntity address;
     private Set<PhoneEntity> phones;
+    @JsonIgnore(value = false)
     private Set<UserEntity> users;
 }

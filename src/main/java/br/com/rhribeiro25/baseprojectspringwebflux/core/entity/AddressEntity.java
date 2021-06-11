@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 /**
@@ -17,13 +18,13 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table("address_table")
+@Table("addresses")
 public class AddressEntity {
     @Id
     private Long id;
     private String zipCode;
     private String street;
-    private String number;
+    private String num;
     private String complement;
     private String district;
     private String city;
