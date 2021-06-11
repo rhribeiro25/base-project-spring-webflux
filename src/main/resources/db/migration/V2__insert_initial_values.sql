@@ -1,20 +1,24 @@
-insert into roles(name, description)
-values ('SUPER', 'Super Usuário'),
+INSERT INTO roles(name, description) VALUES
+('SUPER', 'Super Usuário'),
 ('ADMIN', 'Administrador'),
 ('EMPLOYEE', 'Funcionário'),
 ('INTERN', 'Estagiário');
 
-insert into companies(name)
-values ('Ifood');
+INSERT INTO companies(name)
+VALUES ('Ifood');
 
-insert into addresses(zipCode, street, num, complement, district, city, company_id)
-values ('37500-00', 'Rodovia Itajubá Piranguinho', '45', 'KM 5', 'Santa Barbara', 'Piranguinho', 1);
+INSERT INTO addresses(zipCode, street, num, complement, district, city, company_id)
+VALUES ('37500-00', 'Rodovia Itajubá Piranguinho', '45', 'KM 5', 'Santa Barbara', 'Piranguinho',
+(SELECT id FROM companies WHERE name = 'Ifood'));
 
-insert into users(first_name, middle_name, last_name, email, password, created_at, updated_at, role_id)
-values ('Renan', 'Henrique', 'Ribeiro', 'rhribeiro_25@hotmail.com', '12345678', now(), now(), 1);
+INSERT INTO users(first_name, middle_name, last_name, email, password, created_at, updated_at, role_id)
+VALUES ('Renan', 'Henrique', 'Ribeiro', 'rhribeiro_25@hotmail.com', '12345678', now(), now(),
+(SELECT id FROM roles WHERE name = 'ADMIN'));
 
-insert into phones(ddd, num, phone_type, user_id)
-values ('35', '9 9163-7941', 'CEL', 1);
+INSERT INTO phones(ddd, num, phone_type, user_id)
+VALUES ('35', '9 9163-7941', 'CEL',
+(SELECT id FROM users WHERE email = 'rhribeiro_25@hotmail.com'));
 
-insert into users_companies(user_id, company_id)
-values (1, 1);
+INSERT INTO users_companies(user_id, company_id) VALUES (
+(SELECT id FROM users WHERE email = 'rhribeiro_25@hotmail.com'),
+(SELECT id FROM companies WHERE name = 'Ifood'));
