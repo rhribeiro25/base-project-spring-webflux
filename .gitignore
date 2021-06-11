@@ -5,6 +5,7 @@ build/
 !**/src/test/**/build/
 *.lock
 *.bin
+.idea
 
 # Log file
 *.log
