@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 /**
  * Class User Entity
  *
@@ -22,9 +20,8 @@ public class UserEntity {
     private String firstName;
     private String middleName;
     private String lastName;
-    private RoleEntity role;
     private String email;
     private String password;
-    private Set<PhoneEntity> phones;
-    private Set<CompanyEntity> companies;
+    private String phone;
+    private String role;
 }
