@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 
 /**
  * Class User Entity
@@ -26,4 +25,6 @@ public class UserEntity {
     private String lastName;
     private String email;
     private String password;
+    private String phone;
+    private String role;
 }
