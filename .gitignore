@@ -5,10 +5,12 @@ build/
 !**/src/test/**/build/
 *.lock
 *.bin
-.idea
+.idea/
+out/
 
 # Log file
 *.log
+logs/
 
 # BlueJ files
 *.ctxt

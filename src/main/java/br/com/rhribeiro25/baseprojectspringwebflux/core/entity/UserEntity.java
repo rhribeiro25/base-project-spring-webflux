@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.Set;
-
 /**
  * Class User Entity
  *
@@ -28,11 +26,4 @@ public class UserEntity {
     private String lastName;
     private String email;
     private String password;
-//    @CreatedDate
-//    private Date createdAt;
-//    @LastModifiedDate
-//    private Date updatedAt;
-    private RoleEntity role;
-    private Set<PhoneEntity> phones;
-    private Set<CompanyEntity> companies;
 }
