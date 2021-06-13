@@ -1,13 +1,31 @@
 plugins {
     id 'org.springframework.boot' version '2.5.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "com.palantir.docker" version "0.26.0"
     id 'java'
     id 'jacoco'
 }
 
-group = 'br.com.rhribeiro25'
-version = '0.0.1-SNAPSHOT'
+ext {
+    appVersion = '1.0.1'
+    validatorVersion = '1.7'
+    contextVersion = '4.3.10.RELEASE'
+    openapiVersion = '1.5.2'
+    jaxbVersion = '2.3.0'
+    reactorBomTestVersion = '2020.0.2'
+    blockhoundTestVersion = '1.0.4.RELEASE'
+    jodahTestVersion = '0.4.0'
+    mockserverTestVersion = '5.11.2'
+}
+
+group = 'rhribeiro25'
+version = "${appVersion}"
 sourceCompatibility = '11'
+
+bootJar {
+    baseName = 'base-project-spring-webflux'
+    version = "${appVersion}"
+}
 
 configurations {
     compileOnly { extendsFrom annotationProcessor }
@@ -16,6 +34,9 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
 }
 
 dependencies {
@@ -27,37 +48,37 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-devtools'
     // PostgreSQL Connector
-    runtimeOnly 'io.r2dbc:r2dbc-postgres'
+    runtimeOnly 'io.r2dbc:r2dbc-postgresql'
     // Apache Commons Validator
-    implementation 'commons-validator:commons-validator:1.7'
+    implementation "commons-validator:commons-validator:${validatorVersion}"
     // Context
     implementation 'org.springframework:spring-context'
-    implementation 'org.springframework:spring-context-support:4.3.10.RELEASE'
+    implementation "org.springframework:spring-context-support:${contextVersion}"
     // Reactor project
     implementation 'io.projectreactor:reactor-tools'
     implementation 'io.projectreactor:reactor-core'
     // Openapi
-    implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.5.2'
+    implementation "org.springdoc:springdoc-openapi-webflux-ui:${openapiVersion}"
     // Lombok project
     annotationProcessor 'org.projectlombok:lombok'
     compileOnly 'org.projectlombok:lombok'
     // JAXB API
-    implementation('javax.xml.bind:jaxb-api:2.3.0')
+    implementation "javax.xml.bind:jaxb-api:${jaxbVersion}"
     // Test dependencies
-    implementation platform('io.projectreactor:reactor-bom:2020.0.2')
+    implementation platform("io.projectreactor:reactor-bom:${reactorBomTestVersion}")
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
-    testImplementation 'io.projectreactor.tools:blockhound:1.0.4.RELEASE'
-    testImplementation 'net.jodah:concurrentunit:0.4.0'
+    testImplementation "io.projectreactor.tools:blockhound:${blockhoundTestVersion}"
+    testImplementation "net.jodah:concurrentunit:${jodahTestVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-params"
     testImplementation "org.junit.jupiter:junit-jupiter-api"
-    testImplementation "org.mock-server:mockserver-netty:5.11.2"
-    testImplementation "org.mock-server:mockserver-spring-test-listener:5.11.2"
+    testImplementation "org.mock-server:mockserver-netty:${mockserverTestVersion}"
+    testImplementation "org.mock-server:mockserver-spring-test-listener:${mockserverTestVersion}"
     testRuntimeOnly "org.junit.vintage:junit-vintage-engine"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
-
 }
 
+// Test
 check.dependsOn jacocoTestCoverageVerification
 
 jacoco {
@@ -73,7 +94,8 @@ jacocoTestCoverageVerification {
                 minimum = 0.00
             }
             element = 'CLASS'
-            excludes = []
+            excludes = ['br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.*',
+                        'br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viacep.dtos.*']
         }
     }
 }
@@ -86,7 +108,8 @@ jacocoTestReport {
     }
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [])
+            fileTree(dir: it, exclude: ['br/com/rhribeiro25/baseprojectspringwebflux/core/dtos/*',
+                                        'br/com/rhribeiro25/baseprojectspringwebflux/dataprovider/apis/viacep/dtos/*'])
         }))
     }
 }
@@ -96,4 +119,18 @@ test {
         includeEngines 'junit-jupiter', 'junit-vintage'
     }
     finalizedBy jacocoTestReport
+}
+
+// Docker
+task unpack(type: Copy) {
+    dependsOn bootJar
+    from(zipTree(tasks.bootJar.outputs.files.singleFile))
+    into("build/dependency")
+}
+
+docker {
+    name "${project.group}/${bootJar.baseName}"
+    tags "${bootJar.version}"
+    copySpec.from(tasks.unpack.outputs).into("dependency")
+    buildArgs(['DEPENDENCY': "dependency"])
 }

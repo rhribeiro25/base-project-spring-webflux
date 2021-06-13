@@ -1,6 +1,5 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.entrypoint.facade.rest;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.core.constrain.CepConstraint;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +23,7 @@ public class UserController {
 
     @GetMapping(path = "{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono findAddressByZipCode(@PathVariable Long id) {
+    public Mono findById(@PathVariable Long id) {
         return userService.findById(id);
     }
 }
