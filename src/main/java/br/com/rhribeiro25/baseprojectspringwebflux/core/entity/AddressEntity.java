@@ -19,7 +19,7 @@ public class AddressEntity {
     private Long id;
     private String zipCode;
     private String street;
-    private String number;
+    private String num;
     private String complement;
     private String district;
     private String city;
