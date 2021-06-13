@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nonapi.io.github.classgraph.json.Id;
+import org.springframework.data.annotation.Id;
 
 /**
  * Class User Entity
@@ -17,7 +17,6 @@ import nonapi.io.github.classgraph.json.Id;
 @NoArgsConstructor
 @Builder
 public class UserEntity {
-    @Id
     private Long id;
     private String firstName;
     private String middleName;
