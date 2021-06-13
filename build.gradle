@@ -49,9 +49,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-devtools'
     // PostgreSQL Reactive Connector
     runtimeOnly 'io.r2dbc:r2dbc-postgresql'
-    // Flyway and Postgresql Connector
-    implementation 'org.flywaydb:flyway-core'
-    runtimeOnly 'org.postgresql:postgresql'
     // Apache Commons Validator
     implementation "commons-validator:commons-validator:${validatorVersion}"
     // Context
