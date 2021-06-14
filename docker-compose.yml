@@ -4,6 +4,12 @@ services:
   api:
     container_name: api
     image: rhribeiro25/base-project-spring-webflux:latest
+    environment:
+      - DATABASE_HOST=pgsql
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=base-project-spring-webflux-db
+      - DATABASE_PORT=5432
     restart: always
     ports:
       - 9090:9090
