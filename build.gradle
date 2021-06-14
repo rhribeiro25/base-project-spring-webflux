@@ -7,7 +7,7 @@ plugins {
 }
 
 ext {
-    appVersion = '1.0.1'
+    appVersion = '1.0.3'
     validatorVersion = '1.7'
     contextVersion = '4.3.10.RELEASE'
     openapiVersion = '1.5.2'
@@ -22,11 +22,6 @@ group = 'rhribeiro25'
 version = "${appVersion}"
 sourceCompatibility = '11'
 
-bootJar {
-    baseName = 'base-project-spring-webflux'
-    version = "${appVersion}"
-}
-
 configurations {
     compileOnly { extendsFrom annotationProcessor }
     all { exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging' }
@@ -34,9 +29,7 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://plugins.gradle.org/m2/"
-    }
+    maven { url "https://plugins.gradle.org/m2/" }
 }
 
 dependencies {
@@ -125,6 +118,11 @@ test {
 }
 
 // Docker
+bootJar {
+    baseName = 'base-project-spring-webflux'
+    version = "${appVersion}"
+}
+
 task unpack(type: Copy) {
     dependsOn bootJar
     from(zipTree(tasks.bootJar.outputs.files.singleFile))

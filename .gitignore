@@ -8,6 +8,7 @@ build/
 *gradle/
 
 # Log file
+*.log
 logs/
 
 ### STS ###
