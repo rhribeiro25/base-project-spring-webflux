@@ -12,6 +12,6 @@ import reactor.core.publisher.Mono;
  * @since 06/07/2021
  */
 public interface  UserRepository extends ReactiveCrudRepository<UserEntity, Long> {
-//    @Query("SELECT * FROM users AS u INNER JOIN roles AS r ON u.id = r.id WHERE u.id = :id")
+//    @Query("SELECT * FROM users AS u WHERE u.id = :id")
     Mono<UserEntity> findById(Long id);
 }
