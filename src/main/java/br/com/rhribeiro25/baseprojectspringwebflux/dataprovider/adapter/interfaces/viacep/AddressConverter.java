@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public abstract class AddressConverter {
 
-    public final static Mono converterDpHospitalResponseToObjectResponse(Mono<VcAddressResponse> vcAddressResponse) {
+    public final static Mono converterVcAddressResponseToAddressResponse(Mono<VcAddressResponse> vcAddressResponse) {
         return vcAddressResponse.flatMap(response -> Mono.just(AddressResponse.builder()
                 .zipCode(response.getCep())
                 .street(response.getLogradouro())

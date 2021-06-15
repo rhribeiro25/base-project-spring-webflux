@@ -1,6 +1,8 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserCreateRequest;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.interfaces.bpswf.UserConverter;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.interfaces.generic.GenericConverter;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +33,9 @@ public class UserService {
         Flux<UserEntity> users = userRepository.findAllByIdNotNullOrderByIdAsc(page);
         Mono<Long> count = userRepository.count();
         return GenericConverter.converterFluxToPaginatorResponse(users, page, count);
+    }
+
+    public Mono save(UserCreateRequest user) {
+        return GenericConverter.converterMonoToObjectResponse(userRepository.save(UserConverter.converterUserCreateRequestToUserEntity(user)));
     }
 }

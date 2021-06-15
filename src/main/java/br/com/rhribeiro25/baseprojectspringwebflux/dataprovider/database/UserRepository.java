@@ -22,4 +22,6 @@ public interface  UserRepository extends ReactiveSortingRepository<UserEntity, L
 
     Mono<Long> count();
 
+    Mono<UserEntity> save(UserEntity user);
+
 }

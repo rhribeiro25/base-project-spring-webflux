@@ -59,6 +59,6 @@ public class AddressWebClient {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(VcAddressResponse.class);
-        return AddressConverter.converterDpHospitalResponseToObjectResponse(dpExamPreparationsResponse);
+        return AddressConverter.converterVcAddressResponseToAddressResponse(dpExamPreparationsResponse);
     }
 }
