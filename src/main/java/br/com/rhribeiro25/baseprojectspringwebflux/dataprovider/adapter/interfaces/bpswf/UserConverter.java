@@ -20,6 +20,7 @@ public abstract class UserConverter {
                 .firstName(userRequest.getFirstName())
                 .middleName(userRequest.getMiddleName())
                 .lastName(userRequest.getLastName())
+                .motherName((userRequest.getMotherName()))
                 .email(userRequest.getEmail())
                 .password(userRequest.getPassword())
                 .phone(userRequest.getPhone())

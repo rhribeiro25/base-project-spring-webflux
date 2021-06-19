@@ -1,5 +1,8 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request;
 
+import br.com.rhribeiro25.baseprojectspringwebflux.core.constrain.NameConstraint;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.constrain.OptionalMotherNameConstraint;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.constrain.OptionalNameConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,11 +25,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class UserCreateRequest {
+    @NameConstraint(person = "Usuário(a)", field = "first")
     private String firstName;
+
+    @OptionalNameConstraint(person = "Usuário(a)", field = "middle")
     private String middleName;
+
+    @NameConstraint(person = "Usuário(a)", field = "last")
     private String lastName;
+
+    @OptionalMotherNameConstraint
+    private String motherName;
+
     private String email;
+
     private String password;
+
     private String phone;
+
     private String role;
 }
