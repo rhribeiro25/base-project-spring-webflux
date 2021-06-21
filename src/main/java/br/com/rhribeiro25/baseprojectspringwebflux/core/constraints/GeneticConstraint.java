@@ -1,4 +1,4 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.core.constrain;
+package br.com.rhribeiro25.baseprojectspringwebflux.core.constraints;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

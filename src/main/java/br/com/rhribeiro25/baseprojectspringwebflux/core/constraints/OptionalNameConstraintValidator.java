@@ -1,4 +1,4 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.core.constrain;
+package br.com.rhribeiro25.baseprojectspringwebflux.core.constraints;
 
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.Locale;
 
 /**
- * ConstraintValidator criada tratar anotações do tipo {@link OptionalNameConstraint} para ser possível habilitar validações customizadas
+ * Constraint Validator created to handle annotations of type {@link OptionalNameConstraint} to be able to enable custom validations
  *
  * @author Renan Henrique Ribeiro
  * @since 06/19/2021
@@ -32,11 +32,9 @@ public class OptionalNameConstraintValidator implements GeneticConstraint<Option
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null || value.isEmpty()) return true;
         if (validating(context, FIELD == null, "message.error.name.default")) return false;
-        if (validating(context, !(value.trim().length() <= 127), "message.error." + FIELD + ".name.size")) return false;
-        if (validating(context, !value.matches(REGEX_NOT_NUMBER), "message.error." + FIELD + ".name.pattern.not.number"))
-            return false;
-        if (validating(context, !value.matches(REGEX_VALID_NAME), "message.error." + FIELD + ".name.pattern"))
-            return false;
+        if (validating(context, !(value.trim().length() <= 63), "message.error." + FIELD + ".name.max.size")) return false;
+        if (validating(context, !value.matches(REGEX_NOT_NUMBER), "message.error." + FIELD + ".name.pattern.not.number")) return false;
+        if (validating(context, !value.matches(REGEX_VALID_NAME), "message.error." + FIELD + ".name.pattern")) return false;
         return true;
     }
 

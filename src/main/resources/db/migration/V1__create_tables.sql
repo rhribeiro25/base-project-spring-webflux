@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
 	first_name VARCHAR(63) NOT NULL,
 	middle_name VARCHAR(63),
 	last_name VARCHAR(63) NOT NULL,
+	mother_name VARCHAR(255),
 	email VARCHAR(255) NOT NULL UNIQUE,
 	password VARCHAR(8) NOT NULL,
     phone VARCHAR(23)  NOT NULL,

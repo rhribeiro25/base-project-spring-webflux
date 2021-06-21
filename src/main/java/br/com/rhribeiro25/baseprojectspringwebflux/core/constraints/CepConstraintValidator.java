@@ -1,9 +1,9 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.core.constrain;
+package br.com.rhribeiro25.baseprojectspringwebflux.core.constraints;
 
 import javax.validation.ConstraintValidatorContext;
 
 /**
- * ConstraintValidator created to handle annotations of type {@link CepConstraint} to be able to enable custom validations
+ * Constraint Validator created to handle annotations of type {@link CepConstraint} to be able to enable custom validations
  *
  * @author Renan Henrique Ribeiro
  * @since 06/02/2021
@@ -14,16 +14,9 @@ public class CepConstraintValidator implements GeneticConstraint<CepConstraint, 
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-
-        if (validating(context, (value == null || value.isBlank()), "{message.error.cep.not.blank}"))
-            return false;
-
-        if (validating(context, value.trim().length() > 9, "{message.error.cep.max.size}")) return false;
-
-        if (validating(context, value.trim().length() < 9, "{message.error.cep.min.size}")) return false;
-
+        if (validating(context, (value == null || value.isBlank()), "{message.error.cep.not.blank}")) return false;
+        if (validating(context, value.trim().length() == 9, "{message.error.cep.size}")) return false;
         if (validating(context, !value.matches(CEP_FORMAT), "{message.error.cep.format}")) return false;
-
         return true;
     }
 

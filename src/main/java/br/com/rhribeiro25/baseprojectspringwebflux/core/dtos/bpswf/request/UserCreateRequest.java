@@ -1,18 +1,12 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.core.constrain.NameConstraint;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.constrain.OptionalMotherNameConstraint;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.constrain.OptionalNameConstraint;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.Pattern;
 
 /**
  * Class DTO User Create Request
@@ -37,11 +31,15 @@ public class UserCreateRequest {
     @OptionalMotherNameConstraint
     private String motherName;
 
+    @EmailConstraint
     private String email;
 
+    @PasswordConstraint
     private String password;
 
+    @PhoneConstraint
     private String phone;
 
+    @Pattern(regexp="^ADMIN|COORDINATOR|LEADER|INTERN$")
     private String role;
 }

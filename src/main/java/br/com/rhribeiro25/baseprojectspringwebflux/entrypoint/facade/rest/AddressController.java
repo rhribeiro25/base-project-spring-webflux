@@ -1,6 +1,6 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.entrypoint.facade.rest;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.core.constrain.CepConstraint;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.constraints.CepConstraint;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
