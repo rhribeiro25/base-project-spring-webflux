@@ -1,4 +1,4 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.entrypoint.facade.rest;
+package br.com.rhribeiro25.baseprojectspringwebflux.entrypoint.rest;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.core.constraints.CepConstraint;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.AddressService;

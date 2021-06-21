@@ -2,9 +2,9 @@ package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserCreateRequest;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
-import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.interfaces.bpswf.UserConverter;
-import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.interfaces.generic.GenericConverter;
-import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.UserRepository;
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.bpswf.UserConverter;
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.generic.GenericConverter;
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.postgresql.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;

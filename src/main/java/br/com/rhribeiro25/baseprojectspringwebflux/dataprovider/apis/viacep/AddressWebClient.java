@@ -1,6 +1,6 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viacep;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.interfaces.viacep.AddressConverter;
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.viacep.AddressConverter;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viacep.dtos.response.VcAddressResponse;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;

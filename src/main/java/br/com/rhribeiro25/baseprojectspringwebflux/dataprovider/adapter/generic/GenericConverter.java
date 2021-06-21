@@ -1,4 +1,4 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.interfaces.generic;
+package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.generic;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.DataResponse;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.ObjectResponse;

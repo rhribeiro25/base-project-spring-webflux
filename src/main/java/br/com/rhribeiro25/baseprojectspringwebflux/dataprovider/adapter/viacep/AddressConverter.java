@@ -1,4 +1,4 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.interfaces.viacep;
+package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.viacep;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.viacep.response.AddressResponse;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viacep.dtos.response.VcAddressResponse;

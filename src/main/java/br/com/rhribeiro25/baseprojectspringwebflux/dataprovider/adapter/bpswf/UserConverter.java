@@ -1,4 +1,4 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.interfaces.bpswf;
+package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.bpswf;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserCreateRequest;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;

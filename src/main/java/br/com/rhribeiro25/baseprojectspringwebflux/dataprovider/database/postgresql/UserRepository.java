@@ -1,4 +1,4 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database;
+package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.postgresql;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
 import org.springframework.data.domain.Pageable;
