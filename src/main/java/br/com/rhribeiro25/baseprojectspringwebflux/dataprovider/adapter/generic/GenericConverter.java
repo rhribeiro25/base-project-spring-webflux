@@ -39,13 +39,13 @@ public abstract class GenericConverter {
                 .build())));
     }
 
-    public final static Mono converterMonoToObjectResponse(Mono monoObject) {
+    public final static Mono converterMonoToObjectResponse(Mono monoObject, HttpStatus status) {
         return monoObject.map(object -> ObjectResponse.builder()
-                        .statusCode(HttpStatus.OK.value())
+                        .statusCode(status.value())
                         .data(object)
                         .build())
                 .switchIfEmpty(Mono.just(ObjectResponse.builder()
-                        .statusCode(HttpStatus.OK.value())
+                        .statusCode(status.value())
                         .data(null)
                         .build()));
     }

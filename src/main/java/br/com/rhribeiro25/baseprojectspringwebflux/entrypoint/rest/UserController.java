@@ -1,6 +1,7 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.entrypoint.rest;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserCreateRequest;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserUpdateRequest;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -41,5 +42,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono save(@RequestBody @Valid UserCreateRequest user) {
         return userService.save(user);
+    }
+
+    @PutMapping(path = "{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono update(@PathVariable Long id, @RequestBody @Valid UserUpdateRequest user) {
+        return userService.update(id, user);
     }
 }
