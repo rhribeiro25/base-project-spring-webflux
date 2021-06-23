@@ -3,7 +3,6 @@ package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserCreateRequest;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserUpdateRequest;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
-import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.bpswf.UserConverter;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.generic.GenericConverter;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.postgresql.UserRepository;
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.BadRequestErrorException;
@@ -14,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDateTime;
 
 /**
  * Class User Service
@@ -38,15 +39,22 @@ public class UserService {
         return GenericConverter.converterFluxToPaginatorResponse(users, page, count);
     }
 
-    public Mono save(UserCreateRequest user) {
-        return GenericConverter.converterMonoToObjectResponse(userRepository.save(UserConverter.converterUserCreateRequestToUserEntity(user)), HttpStatus.CREATED);
+    public Mono save(UserCreateRequest createdUser) {
+        UserEntity user = GenericConverter.converterObjectToObject(createdUser, UserEntity.class);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+        return GenericConverter.converterMonoToObjectResponse(userRepository.save(user), HttpStatus.CREATED);
     }
 
-    public Mono update(Long id, UserUpdateRequest newUser) {
+    public Mono update(Long id, UserUpdateRequest updatedUser) {
         return userRepository.findById(id).flatMap(oldUser -> {
-            if (oldUser.getEmail() != newUser.getEmail())
+            if (!oldUser.getEmail().equals(updatedUser.getEmail()))
                 return Mono.error(new BadRequestErrorException("O E-Mail não pode ser alterado!"));
-            return GenericConverter.converterMonoToObjectResponse(userRepository.save(UserConverter.converterUserUpdateRequestToUserEntity(newUser)), HttpStatus.OK);
-        }).switchIfEmpty(GenericConverter.converterMonoToObjectResponse(Mono.just(null), HttpStatus.OK));
+            updatedUser.setId(id);
+            UserEntity user = GenericConverter.converterObjectToObject(updatedUser, UserEntity.class);
+            user.setCreatedAt(oldUser.getCreatedAt());
+            user.setUpdatedAt(LocalDateTime.now());
+            return GenericConverter.converterMonoToObjectResponse(userRepository.save(user), HttpStatus.OK);
+        }).switchIfEmpty(Mono.error(new BadRequestErrorException("O usuário de ID " + id + " não está cadastrado!")));
     }
 }

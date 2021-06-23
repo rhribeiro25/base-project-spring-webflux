@@ -16,6 +16,7 @@ ext {
     blockhoundTestVersion = '1.0.4.RELEASE'
     jodahTestVersion = '0.4.0'
     mockserverTestVersion = '5.11.2'
+    modelMapperVersion = "2.4.4"
 }
 
 group = 'rhribeiro25'
@@ -40,6 +41,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-devtools'
+
+    // MODEL MAPPER
+    implementation "org.modelmapper:modelmapper:${modelMapperVersion}"
 
     // POSTGRESQL REACTIVE CONNECTOR
     runtimeOnly 'io.r2dbc:r2dbc-postgresql'
