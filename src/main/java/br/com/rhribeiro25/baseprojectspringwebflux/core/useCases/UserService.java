@@ -8,6 +8,8 @@ import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.postgre
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.BadRequestErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 /**
  * Class User Service
@@ -26,6 +29,9 @@ import java.time.LocalDateTime;
 @Log4j2
 @RequiredArgsConstructor
 public class UserService {
+
+    @Autowired
+    MessageSource messageSource;
 
     private final UserRepository userRepository;
 
@@ -49,12 +55,12 @@ public class UserService {
     public Mono update(Long id, UserUpdateRequest updatedUser) {
         return userRepository.findById(id).flatMap(oldUser -> {
             if (!oldUser.getEmail().equals(updatedUser.getEmail()))
-                return Mono.error(new BadRequestErrorException("O E-Mail não pode ser alterado!"));
+                return Mono.error(new BadRequestErrorException(messageSource.getMessage("message.bad.request.error.email", null, Locale.getDefault())));
             updatedUser.setId(id);
             UserEntity user = GenericConverter.converterObjectToObject(updatedUser, UserEntity.class);
             user.setCreatedAt(oldUser.getCreatedAt());
             user.setUpdatedAt(LocalDateTime.now());
             return GenericConverter.converterMonoToObjectResponse(userRepository.save(user), HttpStatus.OK);
-        }).switchIfEmpty(Mono.error(new BadRequestErrorException("O usuário de ID " + id + " não está cadastrado!")));
+        }).switchIfEmpty(Mono.error(new BadRequestErrorException(messageSource.getMessage("message.bad.request.error.find.user", null, Locale.getDefault()))));
     }
 }

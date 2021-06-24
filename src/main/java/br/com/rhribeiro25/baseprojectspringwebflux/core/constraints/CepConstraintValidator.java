@@ -15,7 +15,7 @@ public class CepConstraintValidator implements GeneticConstraint<CepConstraint, 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (validating(context, (value == null || value.isBlank()), "{message.error.cep.not.blank}")) return false;
-        if (validating(context, value.trim().length() == 9, "{message.error.cep.size}")) return false;
+        if (validating(context, value.trim().length() != 9, "{message.error.cep.size}")) return false;
         if (validating(context, !value.matches(CEP_FORMAT), "{message.error.cep.format}")) return false;
         return true;
     }

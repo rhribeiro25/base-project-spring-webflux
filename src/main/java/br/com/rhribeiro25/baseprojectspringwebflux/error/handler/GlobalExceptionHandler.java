@@ -64,7 +64,7 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
         int status = (int) Optional.ofNullable(errorAttributesMap.get("status")).orElse(500);
         String msg = errorAttributesMap.get("message").toString();
         if(status == 500) {
-            msg = messageSource.getMessage("message.internal.error", null, Locale.getDefault());
+            msg = messageSource.getMessage("message.internal.server.error", null, Locale.getDefault());
         }
         Error error = Error.builder().statusCode(status)
                 .error(ErrorDetails.builder()

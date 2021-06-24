@@ -34,7 +34,7 @@ public class UserController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public Mono findAll(@RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
+    public Mono findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         return userService.findAll(PageRequest.of(page, size));
     }
 

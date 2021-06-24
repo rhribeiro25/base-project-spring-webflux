@@ -29,16 +29,14 @@ public abstract class GenericConverter {
     private static ModelMapper modelMapper = new ModelMapper();
 
     public final static <S, T> List<T> converterListToList(List<S> source, Class<T> outputClass) {
-        if (null == source || source.isEmpty()) {
+        if (null == source || source.isEmpty())
             throw new InternalServerErrorException("A lista não pode ser vazia!");
-        }
         return source.stream().map(entity -> modelMapper.map(entity, outputClass)).collect(Collectors.toList());
     }
 
     public final static <S, T> T converterObjectToObject(S source, Class<T> outPutClass) {
-        if (null == source) {
+        if (null == source)
             throw new InternalServerErrorException("O objeto não pode ser nulo!");
-        }
         return modelMapper.map(source, outPutClass);
     }
 

@@ -71,7 +71,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<?> handlerInternalServerErrorException(InternalServerErrorException ex) throws JsonProcessingException {
-        String msg =  messageSource.getMessage("message.internal.error", null, Locale.getDefault());
+        String msg =  messageSource.getMessage("message.internal.server.error", null, Locale.getDefault());
         Error error = Error.builder()
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .error(ErrorDetails.builder()

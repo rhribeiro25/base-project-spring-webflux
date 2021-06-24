@@ -21,6 +21,7 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Class Error Utils
@@ -31,11 +32,9 @@ import java.util.Date;
 @Slf4j
 public class ErrorUtils {
 
-    private static String MSG_ERRO_500 = "Identificamos um erro no sistema. Tente novamente em instantes!";
+    private static MessageSource messageSource = StaticContextUtils.getBean(MessageSource.class);
+    private static String MSG_ERRO_500 = messageSource.getMessage("message.internal.server.error", null, Locale.getDefault());
     private static ObjectMapper mapper = new ObjectMapper();
-
-    @Autowired
-    private MessageSource messageSource;
 
     public static Mono<Void> responseFailed(ServerWebExchange exchange, int httpStatus, String msg, String name) throws JsonProcessingException {
         return responseWrite(exchange, httpStatus, msg, name);
