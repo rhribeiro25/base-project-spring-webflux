@@ -5,8 +5,10 @@ import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.Ob
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.PageInfoResponse;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.PaginatorResponse;
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.InternalServerErrorException;
+import br.com.rhribeiro25.baseprojectspringwebflux.utils.StaticContextUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Flux;
@@ -14,6 +16,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,17 +29,18 @@ import java.util.stream.Collectors;
 @Slf4j
 public abstract class GenericConverter {
 
+    private static MessageSource messageSource = StaticContextUtils.getBean(MessageSource.class);
     private static ModelMapper modelMapper = new ModelMapper();
 
     public final static <S, T> List<T> converterListToList(List<S> source, Class<T> outputClass) {
         if (null == source || source.isEmpty())
-            throw new InternalServerErrorException("A lista não pode ser vazia!");
+            throw new InternalServerErrorException(messageSource.getMessage("message.internal.server.error.list.converter", null, Locale.getDefault()));
         return source.stream().map(entity -> modelMapper.map(entity, outputClass)).collect(Collectors.toList());
     }
 
     public final static <S, T> T converterObjectToObject(S source, Class<T> outPutClass) {
         if (null == source)
-            throw new InternalServerErrorException("O objeto não pode ser nulo!");
+            throw new InternalServerErrorException(messageSource.getMessage("message.internal.server.error.object.converter", null, Locale.getDefault()));
         return modelMapper.map(source, outPutClass);
     }
 
