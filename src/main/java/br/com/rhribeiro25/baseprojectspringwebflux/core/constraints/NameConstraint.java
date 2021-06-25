@@ -26,4 +26,5 @@ public @interface NameConstraint {
     Class<? extends Payload>[] payload() default {};
     String person();
     String field();
+    boolean require() default true;
 }

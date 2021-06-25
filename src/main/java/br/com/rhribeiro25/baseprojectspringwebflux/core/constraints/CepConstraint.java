@@ -24,4 +24,5 @@ public @interface CepConstraint {
     String message() default "{message.error.cep.default}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
+    boolean require() default true;
 }

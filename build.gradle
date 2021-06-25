@@ -7,7 +7,7 @@ plugins {
 }
 
 ext {
-    appVersion = '1.0.5'
+    appVersion = '1.0.6'
     validatorVersion = '1.7'
     contextVersion = '4.3.10.RELEASE'
     openapiVersion = '1.5.2'
@@ -17,6 +17,7 @@ ext {
     jodahTestVersion = '0.4.0'
     mockserverTestVersion = '5.11.2'
     modelMapperVersion = "2.4.4"
+    jacksonDateTypeVersion = "2.12.3"
 }
 
 group = 'rhribeiro25'

@@ -18,6 +18,8 @@ public interface  UserRepository extends ReactiveSortingRepository<UserEntity, L
 //  @Query("SELECT * FROM users AS u WHERE u.id = :id")
     Mono<UserEntity> findById(Long id);
 
+    Mono<UserEntity> findByEmail(String email);
+
     Flux<UserEntity> findAllByIdNotNullOrderByIdAsc(Pageable page);
 
     Mono<Long> count();

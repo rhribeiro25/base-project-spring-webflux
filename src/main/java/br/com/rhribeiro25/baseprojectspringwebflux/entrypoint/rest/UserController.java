@@ -1,7 +1,8 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.entrypoint.rest;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserCreateRequest;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserUpdateRequest;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPatch;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPost;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPut;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -32,7 +33,7 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @GetMapping()
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Mono findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         return userService.findAll(PageRequest.of(page, size));
@@ -40,13 +41,19 @@ public class UserController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono save(@RequestBody @Valid UserCreateRequest user) {
+    public Mono save(@RequestBody @Valid UserRequestPost user) {
         return userService.save(user);
     }
 
-    @PutMapping(path = "{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public Mono update(@PathVariable Long id, @RequestBody @Valid UserUpdateRequest user) {
-        return userService.update(id, user);
+    public Mono update(@RequestBody @Valid UserRequestPut user) {
+        return userService.updateByPut(user);
+    }
+
+    @PatchMapping(path = "{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono update(@PathVariable Long id, @RequestBody @Valid UserRequestPatch user) {
+        return userService.updateByPatch(id, user);
     }
 }

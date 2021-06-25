@@ -1,5 +1,6 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.constraints;
 
+import br.com.rhribeiro25.baseprojectspringwebflux.utils.StringUtils;
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -20,6 +21,7 @@ public class NameConstraintValidator implements GeneticConstraint<NameConstraint
 
     private String PERSON = null;
     private String FIELD = null;
+    private boolean REQUIRE;
     private static final String REGEX_NOT_NUMBER = "^[^0-9]+$";
     private static final String REGEX_VALID_NAME = "^([\\w'\\-,.][^0-9_!¡?÷?¿/\\\\\\\\+=@#$%ˆ&*()\\\\{}|~<>;:[\\\\]]{2,})$";
 
@@ -27,15 +29,18 @@ public class NameConstraintValidator implements GeneticConstraint<NameConstraint
     public void initialize(NameConstraint constrain) {
         PERSON = constrain.person();
         FIELD = constrain.field();
+        REQUIRE = constrain.require();
     }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (validating(context, FIELD == null, "message.error.name.default")) return false;
-        if (validating(context, (value == null || value.isBlank()), "message.error." + FIELD + ".name.not.blank")) return false;
-        if (validating(context, !(value.trim().length() <= 63), "message.error." + FIELD + ".name.max.size")) return false;
-        if (validating(context, !value.matches(REGEX_NOT_NUMBER), "message.error." + FIELD + ".name.pattern.not.number"))            return false;
-        if (validating(context, !value.matches(REGEX_VALID_NAME), "message.error." + FIELD + ".name.pattern")) return false;
+        if (validating(context, REQUIRE && StringUtils.isNullOrBlank(value), "message.error." + FIELD + ".name.not.blank")) return false;
+        else if(StringUtils.isNotNullAndBlank(value)) {
+            if (validating(context, !(value.trim().length() <= 63), "message.error." + FIELD + ".name.max.size")) return false;
+            if (validating(context, !value.matches(REGEX_NOT_NUMBER), "message.error." + FIELD + ".name.pattern.not.number")) return false;
+            if (validating(context, !value.matches(REGEX_VALID_NAME), "message.error." + FIELD + ".name.pattern")) return false;
+        }
         return true;
     }
 

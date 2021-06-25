@@ -9,29 +9,26 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Pattern;
 
 /**
- * Class DTO User Update Request
+ * Class DTO User Create Request
  *
  * @author Renan Henrique Ribeiro
- * @since 06/21/2021
+ * @since 06/07/2021
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserUpdateRequest {
-
-    private Long id;
-
+public class UserRequestPost {
     @NameConstraint(person = "Usuário(a)", field = "first")
     private String firstName;
 
-    @OptionalNameConstraint(person = "Usuário(a)", field = "middle")
+    @NameConstraint(person = "Usuário(a)", field = "middle", require = false)
     private String middleName;
 
     @NameConstraint(person = "Usuário(a)", field = "last")
     private String lastName;
 
-    @OptionalMotherNameConstraint
+    @MotherNameConstraint(require = false)
     private String motherName;
 
     @EmailConstraint
@@ -43,6 +40,6 @@ public class UserUpdateRequest {
     @PhoneConstraint
     private String phone;
 
-    @Pattern(regexp="^ADMIN|COORDINATOR|LEADER|INTERN$")
+    @RoleConstraint
     private String role;
 }

@@ -24,4 +24,5 @@ public @interface PasswordConstraint {
     String message() default "{message.error.password.default}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
+    boolean require() default true;
 }

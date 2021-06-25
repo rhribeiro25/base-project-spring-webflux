@@ -11,17 +11,18 @@ import java.lang.annotation.Target;
  * Constraint created to be able to enable custom validations
  *
  * @author Renan Henrique Ribeiro
- * @since 06/19/2021
+ * @since 28/01/2021
  */
-@Constraint(validatedBy = OptionalMotherNameConstraintValidator.class)
+@Constraint(validatedBy = RoleConstraintValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.CONSTRUCTOR,
         ElementType.FIELD,
         ElementType.TYPE,
         ElementType.METHOD,
         ElementType.PARAMETER})
-public @interface OptionalMotherNameConstraint {
-    String message() default "{message.error.name.default}";
+public @interface RoleConstraint {
+    String message() default "{message.error.role.default}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
+    boolean require() default true;
 }

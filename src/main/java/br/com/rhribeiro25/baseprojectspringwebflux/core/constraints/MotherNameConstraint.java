@@ -13,17 +13,16 @@ import java.lang.annotation.Target;
  * @author Renan Henrique Ribeiro
  * @since 06/19/2021
  */
-@Constraint(validatedBy = OptionalNameConstraintValidator.class)
+@Constraint(validatedBy = MotherNameConstraintValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.CONSTRUCTOR,
         ElementType.FIELD,
         ElementType.TYPE,
         ElementType.METHOD,
         ElementType.PARAMETER})
-public @interface OptionalNameConstraint {
+public @interface MotherNameConstraint {
     String message() default "{message.error.name.default}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
-    String person();
-    String field();
+    boolean require() default true;
 }

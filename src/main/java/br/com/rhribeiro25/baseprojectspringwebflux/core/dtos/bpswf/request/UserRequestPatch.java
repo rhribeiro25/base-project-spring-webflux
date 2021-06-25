@@ -6,40 +6,39 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Pattern;
-
 /**
- * Class DTO User Create Request
+ * Class DTO User Update Request
  *
  * @author Renan Henrique Ribeiro
- * @since 06/07/2021
+ * @since 06/21/2021
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserCreateRequest {
-    @NameConstraint(person = "Usuário(a)", field = "first")
+public class UserRequestPatch {
+
+    @NameConstraint(person = "Usuário(a)", field = "first", require = false)
     private String firstName;
 
-    @OptionalNameConstraint(person = "Usuário(a)", field = "middle")
+    @NameConstraint(person = "Usuário(a)", field = "middle", require = false)
     private String middleName;
 
-    @NameConstraint(person = "Usuário(a)", field = "last")
+    @NameConstraint(person = "Usuário(a)", field = "last", require = false)
     private String lastName;
 
-    @OptionalMotherNameConstraint
+    @MotherNameConstraint(require = false)
     private String motherName;
 
-    @EmailConstraint
+    @EmailConstraint(require = false)
     private String email;
 
-    @PasswordConstraint
+    @PasswordConstraint(require = false)
     private String password;
 
-    @PhoneConstraint
+    @PhoneConstraint(require = false)
     private String phone;
 
-    @Pattern(regexp="^ADMIN|COORDINATOR|LEADER|INTERN$")
+    @RoleConstraint(require = false)
     private String role;
 }

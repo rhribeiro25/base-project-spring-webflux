@@ -1,5 +1,7 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.constraints;
 
+import br.com.rhribeiro25.baseprojectspringwebflux.utils.StringUtils;
+
 import javax.validation.ConstraintValidatorContext;
 
 /**
@@ -11,13 +13,21 @@ import javax.validation.ConstraintValidatorContext;
 public class EmailConstraintValidator implements GeneticConstraint<EmailConstraint, String> {
 
     private static final String REGEX_VALID_EMAIL = "^[\\w\\d.]+@[\\w\\d]+.[\\w\\d]+(.[\\w\\d]+)?$";
+    private boolean REQUIRE;
+
+    @Override
+    public void initialize(EmailConstraint constrain) {
+        REQUIRE = constrain.require();
+    }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (validating(context, (value == null || value.isBlank()), "{message.error.email.not.blank}")) return false;
-        if (validating(context, value.trim().length() < 15, "{message.error.email.min.size}")) return false;
-        if (validating(context, value.trim().length() > 255, "{message.error.email.max.size}")) return false;
-        if (validating(context, !value.matches(REGEX_VALID_EMAIL), "{message.error.email.pattern.invalid}")) return false;
+        if (validating(context, REQUIRE && StringUtils.isNullOrBlank(value), "{message.error.email.not.blank}")) return false;
+        else if(StringUtils.isNotNullAndBlank(value)) {
+            if (validating(context, value.trim().length() < 15, "{message.error.email.min.size}")) return false;
+            if (validating(context, value.trim().length() > 255, "{message.error.email.max.size}")) return false;
+            if (validating(context, !value.matches(REGEX_VALID_EMAIL), "{message.error.email.pattern.invalid}")) return false;
+        }
         return true;
     }
 

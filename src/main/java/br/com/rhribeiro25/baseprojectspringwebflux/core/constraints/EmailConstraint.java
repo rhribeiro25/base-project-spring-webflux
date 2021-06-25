@@ -24,4 +24,5 @@ public @interface EmailConstraint {
     String message() default "{message.error.email.default}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
+    boolean require() default true;
 }
