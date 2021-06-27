@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
 	password VARCHAR(8) NOT NULL,
     phone VARCHAR(23)  NOT NULL,
     role VARCHAR(63)  NOT NULL,
+    is_activated BOOLEAN  NOT NULL,
 	created_at TIMESTAMP NOT NULL,
 	updated_at TIMESTAMP NOT NULL,
 	CONSTRAINT user_pk PRIMARY KEY (id));

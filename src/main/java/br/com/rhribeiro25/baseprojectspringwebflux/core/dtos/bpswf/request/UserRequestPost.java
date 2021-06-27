@@ -19,6 +19,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 @Builder
 public class UserRequestPost {
+
     @NameConstraint(person = "Usuário(a)", field = "first")
     private String firstName;
 

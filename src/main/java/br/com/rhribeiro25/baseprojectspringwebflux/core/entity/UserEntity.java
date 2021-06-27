@@ -33,6 +33,7 @@ public class UserEntity {
     private String password;
     private String phone;
     private String role;
+    private Boolean isActivated = true;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate

@@ -16,11 +16,11 @@ import reactor.core.publisher.Mono;
 public interface  UserRepository extends ReactiveSortingRepository<UserEntity, Long> {
 
 //  @Query("SELECT * FROM users AS u WHERE u.id = :id")
-    Mono<UserEntity> findById(Long id);
+    Mono<UserEntity> findByIdAndIsActivated(Long id, Boolean isActivated);
 
     Mono<UserEntity> findByEmail(String email);
 
-    Flux<UserEntity> findAllByIdNotNullOrderByIdAsc(Pageable page);
+    Flux<UserEntity> findAllByIsActivated(Pageable page, Boolean isActivated);
 
     Mono<Long> count();
 

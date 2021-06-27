@@ -56,4 +56,10 @@ public class UserController {
     public Mono update(@PathVariable Long id, @RequestBody @Valid UserRequestPatch user) {
         return userService.updateByPatch(id, user);
     }
+
+    @DeleteMapping(path = "{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono delete(@PathVariable Long id) {
+        return userService.delete(id);
+    }
 }

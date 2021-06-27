@@ -37,19 +37,21 @@ public class UserService {
     private final UserRepository userRepository;
 
     public Mono findById(Long id) {
-        return GenericConverter.converterMonoToObjectResponse(userRepository.findById(id), HttpStatus.OK);
+        return GenericConverter.converterMonoToObjectResponse(userRepository.findByIdAndIsActivated(id, true), HttpStatus.OK);
     }
 
     public Mono findAll(Pageable page) {
-        Flux<UserEntity> users = userRepository.findAllByIdNotNullOrderByIdAsc(page);
+        Flux<UserEntity> users = userRepository.findAllByIsActivated(page, true);
         Mono<Long> count = userRepository.count();
         return GenericConverter.converterFluxToPaginatorResponse(users, page, count);
     }
 
     public Mono save(UserRequestPost createdUser) {
-        return userRepository.findByEmail(createdUser.getEmail()).flatMap(existingUser ->
-                Mono.error(new BadRequestErrorException(messageSource.getMessage("message.bad.request.error.existing.user", null, Locale.getDefault())))
-        ).switchIfEmpty(Mono.defer(() -> {
+        return userRepository.findByEmail(createdUser.getEmail()).flatMap(existingUser -> {
+            if(existingUser.getIsActivated())
+                return Mono.error(new BadRequestErrorException(messageSource.getMessage("message.bad.request.error.existing.user", null, Locale.getDefault())));
+            return updateByPatch(existingUser.getId(), GenericConverter.converterObjectToObject(createdUser, UserRequestPatch.class));
+        }).switchIfEmpty(Mono.defer(() -> {
             UserEntity user = GenericConverter.converterObjectToObject(createdUser, UserEntity.class);
             return GenericConverter.converterMonoToObjectResponse(userRepository.save(user), HttpStatus.CREATED);
         }));
@@ -85,7 +87,15 @@ public class UserService {
                 oldUser.setPhone(updatedUser.getPhone());
             if (!StringUtils.isNullOrBlank(updatedUser.getRole()))
                 oldUser.setRole(updatedUser.getRole());
+            oldUser.setIsActivated(true);
             return GenericConverter.converterMonoToObjectResponse(userRepository.save(oldUser), HttpStatus.OK);
+        }).switchIfEmpty(Mono.error(new BadRequestErrorException(messageSource.getMessage("message.bad.request.error.find.user", null, Locale.getDefault()))));
+    }
+
+    public Mono delete(Long id) {
+        return userRepository.findById(id).flatMap(oldUser -> {
+            oldUser.setIsActivated(false);
+            return userRepository.save(oldUser).flatMap(deletedUser -> Mono.just("Usuário deletado com sucesso!"));
         }).switchIfEmpty(Mono.error(new BadRequestErrorException(messageSource.getMessage("message.bad.request.error.find.user", null, Locale.getDefault()))));
     }
 }
