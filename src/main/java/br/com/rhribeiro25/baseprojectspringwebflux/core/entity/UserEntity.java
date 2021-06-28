@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table("users")
-public class UserEntity {
+public class UserEntity implements GenericEntity {
     @Id
     private Long id;
     private String firstName;
