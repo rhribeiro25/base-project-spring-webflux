@@ -7,7 +7,7 @@ plugins {
 }
 
 ext {
-    appVersion = '1.0.8'
+    appVersion = '1.0.9'
     validatorVersion = '1.7'
     contextVersion = '4.3.10.RELEASE'
     openapiVersion = '1.5.2'
@@ -38,10 +38,22 @@ dependencies {
     // SPRING PROJECTS
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-devtools'
+
+    // SECURITY CONFIG
+    implementation 'org.springframework.security:spring-security-config'
+
+    // O AUTH 2
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
+    implementation 'org.springframework.security:spring-security-oauth2-client'
+    implementation 'org.springframework.security:spring-security-oauth2-resource-server'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
     // MODEL MAPPER
     implementation "org.modelmapper:modelmapper:${modelMapperVersion}"

@@ -3,7 +3,10 @@ package br.com.rhribeiro25.baseprojectspringwebflux.entrypoint.rest;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPatch;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPost;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPut;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.UserService;
+import br.com.rhribeiro25.baseprojectspringwebflux.utils.JwtUtils;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -22,7 +25,11 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("api/users")
 @Validated
+@Log4j2
 public class UserController {
+
+    @Autowired
+    JwtUtils jwtUtils;
 
     @Autowired
     private UserService userService;
@@ -30,6 +37,7 @@ public class UserController {
     @GetMapping(path = "{id}")
     @ResponseStatus(HttpStatus.OK)
     public Mono findById(@PathVariable Long id) {
+//        log.info(jwtUtils.createToken(UserEntity.builder().email("email").firstName("Renan").role("ADMIN").build()));
         return userService.findById(id);
     }
 
