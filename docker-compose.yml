@@ -28,7 +28,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - ./sgbd/postgres:/var/lib/postgresql/data
 
   pgadmin:
     container_name: pgadmin
@@ -40,8 +40,10 @@ services:
       - 16543:80
     depends_on:
       - pgsql
+    volumes:
+      - ./sgbd/pgadmin:/var/lib/pgadmin
 
 networks:
   default:
-    external:
-      name: base-project-spring-webflux-net
+    name: base-project-spring-webflux-net
+    driver: bridge
