@@ -3,13 +3,9 @@ version: '3.7'
 services:
   api:
     container_name: api
-    image: rhribeiro25/base-project-spring-webflux:latest
-    environment:
-      - DATABASE_HOST=pgsql
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=postgres
-      - DATABASE_NAME=base-project-spring-webflux-db
-      - DATABASE_PORT=5432
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: always
     ports:
       - 9090:9090
@@ -28,7 +24,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - ./sgbd/postgres:/var/lib/postgresql/data
 
   pgadmin:
     container_name: pgadmin
@@ -38,10 +34,12 @@ services:
       PGADMIN_DEFAULT_PASSWORD: postgres
     ports:
       - 16543:80
+    volumes:
+      - ./sgbd/pgadmin:/var/lib/pgadmin
     depends_on:
       - pgsql
 
-networks:
-  default:
-    external:
+  networks:
+    default:
       name: base-project-spring-webflux-net
+      driver: bridge
