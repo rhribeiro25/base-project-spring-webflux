@@ -39,7 +39,7 @@ services:
     depends_on:
       - pgsql
 
-  networks:
-    default:
-      name: base-project-spring-webflux-net
-      driver: bridge
+networks:
+  default:
+    name: base-project-spring-webflux-net
+    driver: bridge

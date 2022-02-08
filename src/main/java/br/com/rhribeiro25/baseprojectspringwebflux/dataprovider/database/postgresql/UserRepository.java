@@ -3,6 +3,7 @@ package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.postgr
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.reactive.ReactiveSortingRepository;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -13,6 +14,7 @@ import reactor.core.publisher.Mono;
  * @author Renan Henrique Ribeiro
  * @since 06/07/2021
  */
+@Repository
 public interface  UserRepository extends ReactiveSortingRepository<UserEntity, Long> {
 
 //  @Query("SELECT * FROM users AS u WHERE u.id = :id")

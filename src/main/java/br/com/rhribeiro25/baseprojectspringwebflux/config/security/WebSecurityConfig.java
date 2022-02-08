@@ -1,65 +1,66 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.config.security;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.error.AuthenticationError;
-import br.com.rhribeiro25.baseprojectspringwebflux.error.handler.AcessDeniedHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.env.Environment;
-import org.springframework.security.authorization.ReactiveAuthorizationManager;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.oauth2.jwt.MappedJwtClaimSetConverter;
-import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
-import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
-import org.springframework.security.oauth2.jwt.ReactiveJwtDecoders;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter.Mode;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
+import java.util.Collection;
+
+/**
+ * WebFlux configuration class
+ *
+ * @author Renan Henrique Ribeiro
+ * @since 08/02/2022
+ */
 
 @Slf4j
 @Configuration
-@EnableReactiveMethodSecurity
 @EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
 public class WebSecurityConfig {
 
-    private String ISSUER_URI;
+    private static final PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
     private String ALLOWED_ORIGIN;
 
     @Autowired
-    private AuthenticationError authenticationError;
-
-    @Autowired
-    private AcessDeniedHandler acessDeniedHandler;
-
-    @Autowired
     public WebSecurityConfig(Environment env) {
-        ISSUER_URI = env.getProperty("spring.security.oauth2.resourceserver.jwk.issuer-uri");
         ALLOWED_ORIGIN = env.getProperty("allowed.origin");
     }
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        http.exceptionHandling()
-                .authenticationEntryPoint(authenticationError)
-                .accessDeniedHandler(acessDeniedHandler).and()
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+        return http
+                .authorizeExchange()
+                .pathMatchers(HttpMethod.GET, "/api/users/*").authenticated()
+                .pathMatchers(HttpMethod.POST, "/api/users").hasRole("ADMIN")
+                .pathMatchers(HttpMethod.PUT, "/api/users").hasRole("ADMIN")
+                .pathMatchers(HttpMethod.PATCH, "/api/users").hasRole("ADMIN")
+                .pathMatchers(HttpMethod.DELETE, "/api/users").hasRole("ADMIN")
+                .pathMatchers(HttpMethod.GET, "/api/addresses*").authenticated().and()
                 .csrf().disable()
-                .formLogin().disable()
                 .cors().and()
-                .httpBasic().disable();
-        http.oauth2ResourceServer().bearerTokenConverter(new JwtConfig()).authenticationEntryPoint(authenticationError).jwt();
-        http.authorizeExchange().anyExchange().access(reactiveAuthorizationManager());
-        http.headers().frameOptions().mode(Mode.SAMEORIGIN);
-        return http.build();
+                .httpBasic(Customizer.withDefaults())
+                .formLogin(Customizer.withDefaults())
+                .build();
     }
 
     @Bean
@@ -74,23 +75,24 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public ReactiveAuthorizationManager reactiveAuthorizationManager() {
-        AuthorizationConfig webfluxReactiveAuthorizationConfig = new AuthorizationConfig();
-        return webfluxReactiveAuthorizationConfig;
+    public MapReactiveUserDetailsService mapReactiveUserDetailsService() {
+        return new MapReactiveUserDetailsService(users);
     }
 
-    @Bean
-    public ReactiveJwtDecoder reactiveJwtDecoderByIssuerUri() {
-        var jwtDecoder = (NimbusReactiveJwtDecoder) ReactiveJwtDecoders.fromIssuerLocation(ISSUER_URI);
-        jwtDecoder.setClaimSetConverter(new Converter<Map<String, Object>, Map<String, Object>>() {
-            @Override
-            public Map<String, Object> convert(Map<String, Object> claims) {
-                var convertedClaims = MappedJwtClaimSetConverter.withDefaults(Collections.emptyMap()).convert(claims);
-                convertedClaims.put("sub", (String) convertedClaims.get("preferred_username"));
-
-                return convertedClaims;
-            }
-        });
-        return jwtDecoder;
+    private static UserDetails user(String user, String password, String... roles) {
+        return User.builder()
+                .username(user)
+                .password(password)
+                .passwordEncoder(encoder::encode)
+                .roles(roles)
+                .build();
     }
+
+    private static final Collection<UserDetails> users = new ArrayList<>(
+            Arrays.asList(
+                    user("thor", "raios","ADMIN"),
+                    user("loki", "magia","USER"),
+                    user("zeus", "sabedoria","ADMIN", "USER")
+            ));
+
 }
