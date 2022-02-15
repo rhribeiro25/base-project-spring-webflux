@@ -44,13 +44,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-devtools'
 
-    // SECURITY CONFIG
-    implementation 'org.springframework.security:spring-security-config'
-
-    // O AUTH 2
-    implementation 'org.springframework.security:spring-security-oauth2-jose'
-    implementation 'org.springframework.security:spring-security-oauth2-client'
-    implementation 'org.springframework.security:spring-security-oauth2-resource-server'
+    // JSON WEB TOKEN
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
     // MODEL MAPPER
     implementation "org.modelmapper:modelmapper:${modelMapperVersion}"
