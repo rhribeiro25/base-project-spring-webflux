@@ -1,14 +1,16 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.entrypoint.rest;
 
+import br.com.rhribeiro25.baseprojectspringwebflux.config.security.JwtUtil;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPatch;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPost;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPut;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +33,23 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @PostMapping("/login")
+    public Mono login(@RequestBody UserEntity user) {
+        return Mono.just(jwtUtil.generateToken(user));
+    }
+
     @GetMapping(path = "{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono findById(@AuthenticationPrincipal UserDetails user,
-                         @PathVariable Long id) {
+    public Mono findById(@PathVariable Long id) {
         return userService.findById(id);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Mono findAll(@AuthenticationPrincipal UserDetails user,
-                        @RequestParam(defaultValue = "0") int page,
+    public Mono findAll(@RequestParam(defaultValue = "0") int page,
                         @RequestParam(defaultValue = "10") int size) {
         return userService.findAll(PageRequest.of(page, size));
     }
