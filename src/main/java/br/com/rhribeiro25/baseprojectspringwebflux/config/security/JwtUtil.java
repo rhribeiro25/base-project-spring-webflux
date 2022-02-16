@@ -23,7 +23,7 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private String expirationTime;
 
-    public String extractUsername(String authToken) {
+    public String extractEmail(String authToken) {
         return getClaimsFromToken(authToken)
                 .getSubject();
     }

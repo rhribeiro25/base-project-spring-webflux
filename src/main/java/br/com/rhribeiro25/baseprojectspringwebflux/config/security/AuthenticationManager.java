@@ -1,6 +1,7 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.config.security;
 
 import io.jsonwebtoken.Claims;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Log4j2
 public class AuthenticationManager implements ReactiveAuthenticationManager {
 
 
@@ -22,24 +24,21 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
         String authToken = authentication.getCredentials().toString();
-
-        String username;
-
+        String email;
         try {
-            username = jwtUtil.extractUsername(authToken);
+            email = jwtUtil.extractEmail(authToken);
         } catch (Exception e) {
-            username = null;
-            System.out.println(e);
+            email = null;
+            log.error(e.getMessage());
         }
-
-        if (username != null && jwtUtil.validateToken(authToken)) {
+        if (email != null && jwtUtil.validateToken(authToken)) {
             Claims claims = jwtUtil.getClaimsFromToken(authToken);
             List<String> role = claims.get("role", List.class);
             List<SimpleGrantedAuthority> authorities = role.stream()
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    username,
+                    email,
                     null,
                     authorities
             );

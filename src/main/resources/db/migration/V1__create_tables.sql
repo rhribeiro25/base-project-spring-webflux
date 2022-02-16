@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
 	last_name VARCHAR(63) NOT NULL,
 	mother_name VARCHAR(255),
 	email VARCHAR(255) NOT NULL UNIQUE,
-	password VARCHAR(8) NOT NULL,
+	password VARCHAR(255) NOT NULL,
     phone VARCHAR(23)  NOT NULL,
     role VARCHAR(63)  NOT NULL,
     is_activated BOOLEAN  NOT NULL,

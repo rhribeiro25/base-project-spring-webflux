@@ -2,7 +2,7 @@ package br.com.rhribeiro25.baseprojectspringwebflux.error.handler;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.utils.ErrorUtils;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ import java.util.Locale;
  * @author Renan Henrique Ribeiro
  * @since 06/28/2021
  */
-@Slf4j
+@Log4j2
 @Component
 public class AcessDeniedHandler implements ServerAccessDeniedHandler {
 

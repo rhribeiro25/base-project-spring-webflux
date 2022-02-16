@@ -8,7 +8,7 @@ import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.NotFoundError
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.UnauthorizedErrorException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ import java.util.*;
  * @author Renan Henrique Ribeiro
  * @since 06/02/2021
  */
-@Slf4j
+@Log4j2
 @RestControllerAdvice
 public class RestExceptionHandler {
 

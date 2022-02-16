@@ -15,4 +15,5 @@ public interface UserService extends CrudService {
     Mono verifyUserByEmailOrActivateUser(UserRequestPost createdUser);
     Mono setUserData(Long id, UserRequestPatch updatedUser);
     Mono<UserEntity> findByEmail(String email);
+    Mono verifyPassword(UserEntity user);
 }

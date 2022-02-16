@@ -2,7 +2,7 @@ package br.com.rhribeiro25.baseprojectspringwebflux.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Component
 @Aspect
-@Slf4j
+@Log4j2
 public class LoggerInterceptorConfig {
 
     private ObjectMapper mapper;

@@ -2,7 +2,7 @@ package br.com.rhribeiro25.baseprojectspringwebflux.error;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
  * @author Renan Henrique Ribeiro
  * @since 06/02/2021
  */
-@Slf4j
+@Log4j2
 @Data
 @EqualsAndHashCode(callSuper=false)
 public class ExceptionResponse  {

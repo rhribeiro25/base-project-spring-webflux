@@ -1,6 +1,6 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.config.security;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,7 @@ import java.util.Arrays;
  * @since 08/02/2022
  */
 
-@Slf4j
+@Log4j2
 @Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
@@ -58,6 +58,7 @@ public class WebSecurityConfig {
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.POST, "/api/auth/*").permitAll()
+                .pathMatchers(HttpMethod.GET, "/api/users*").authenticated()
                 .pathMatchers(HttpMethod.GET, "/api/users/*").authenticated()
                 .pathMatchers(HttpMethod.POST, "/api/users").hasRole("ADMIN")
                 .pathMatchers(HttpMethod.PUT, "/api/users").hasRole("ADMIN")

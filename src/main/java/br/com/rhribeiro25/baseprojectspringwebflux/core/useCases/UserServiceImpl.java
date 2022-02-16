@@ -1,8 +1,10 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 
+import br.com.rhribeiro25.baseprojectspringwebflux.config.security.JwtUtil;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPatch;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPost;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPut;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.response.UserResponse;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.generic.GenericConverter;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.postgresql.UserRepository;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
@@ -32,10 +36,18 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final static ResponseEntity<Object> UNAUTHORIZED =
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
     @Autowired
-    MessageSource messageSource;
+    private JwtUtil jwtUtil;
+
+    private final MessageSource messageSource;
 
     private final UserRepository userRepository;
+
+
+    private final PasswordEncoder encoder;
 
     public Mono findById(Long id) {
         return GenericConverter.converterMonoToObjectResponse(userRepository.findByIdAndIsActivated(id, true), HttpStatus.OK);
@@ -55,7 +67,10 @@ public class UserServiceImpl implements UserService {
     public Mono save(Object createdUser) {
         return verifyUserByEmailOrActivateUser((UserRequestPost) createdUser).switchIfEmpty(Mono.defer(() -> {
             UserEntity user = GenericConverter.converterObjectToObject(createdUser, UserEntity.class);
-            return GenericConverter.converterMonoToObjectResponse(userRepository.save(user), HttpStatus.CREATED);
+            user.setPassword(encoder.encode(user.getPassword()));
+            Mono userSaved = userRepository.save(user);
+            UserResponse userResponse = GenericConverter.converterObjectToObject(userSaved, UserResponse.class);
+            return GenericConverter.converterMonoToObjectResponse(Mono.just(userResponse), HttpStatus.CREATED);
         }));
     }
 
@@ -67,6 +82,7 @@ public class UserServiceImpl implements UserService {
                         messageSource.getMessage("message.bad.request.error.email", null, Locale.getDefault()))
                 );
             UserEntity user = GenericConverter.converterObjectToObject(updatedUser, UserEntity.class);
+            user.setPassword(encoder.encode(user.getPassword()));
             return GenericConverter.converterMonoToObjectResponse(userRepository.save(user), HttpStatus.OK);
         }).switchIfEmpty(Mono.error(new BadRequestErrorException(
                 messageSource.getMessage("message.bad.request.error.find.user", null, Locale.getDefault())))
@@ -121,8 +137,9 @@ public class UserServiceImpl implements UserService {
                     );
                 oldUser.setEmail(updatedUser.getEmail());
             }
-            if (!StringUtils.isNullOrBlank(updatedUser.getPassword()))
-                oldUser.setPassword(updatedUser.getPassword());
+            if (!StringUtils.isNullOrBlank(updatedUser.getPassword())) {
+                oldUser.setPassword(encoder.encode(updatedUser.getPassword()));
+            }
             if (!StringUtils.isNullOrBlank(updatedUser.getPhone()))
                 oldUser.setPhone(updatedUser.getPhone());
             if (!StringUtils.isNullOrBlank(updatedUser.getRole()))
@@ -130,5 +147,13 @@ public class UserServiceImpl implements UserService {
             oldUser.setIsActivated(true);
             return Mono.just(oldUser);
         });
+    }
+
+    public Mono verifyPassword(UserEntity user) {
+        return this.findByEmail(user.getEmail()).map(userDb ->
+                encoder.matches(user.getPassword(), userDb.getPassword())
+                        ? ResponseEntity.ok(jwtUtil.generateToken(userDb))
+                        : UNAUTHORIZED
+        );
     }
 }

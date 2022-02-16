@@ -1,6 +1,6 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.utils;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Class Object Utils
@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Renan Henrique Ribeiro
  * @since 06/02/2021
  */
-@Slf4j
+@Log4j2
 public class StringUtils {
     public final static Boolean isNullOrBlank(String value) {
         return (value == null || value.isBlank());

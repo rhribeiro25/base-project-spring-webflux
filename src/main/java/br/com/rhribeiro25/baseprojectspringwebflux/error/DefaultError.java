@@ -2,7 +2,7 @@ package br.com.rhribeiro25.baseprojectspringwebflux.error;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.ForbiddenErrorException;
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.UnauthorizedErrorException;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
 import org.springframework.core.annotation.Order;
@@ -18,7 +18,8 @@ import java.util.Map;
  * @author Renan Henrique Ribeiro
  * @since 06/02/2021
  */
-@Slf4j
+
+@Log4j2
 @Component
 @Order(-2)
 public class DefaultError extends DefaultErrorAttributes {

@@ -6,8 +6,7 @@ import br.com.rhribeiro25.baseprojectspringwebflux.error.ExceptionResponse;
 import br.com.rhribeiro25.baseprojectspringwebflux.error.WebClientErrorResponseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.context.MessageSource;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
@@ -29,7 +28,7 @@ import java.util.Locale;
  * @author Renan Henrique Ribeiro
  * @since 06/02/2021
  */
-@Slf4j
+@Log4j2
 public class ErrorUtils {
 
     private static MessageSource messageSource = StaticContextUtils.getBean(MessageSource.class);

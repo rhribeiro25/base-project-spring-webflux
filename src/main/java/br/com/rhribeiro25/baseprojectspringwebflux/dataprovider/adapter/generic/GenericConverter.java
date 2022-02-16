@@ -6,7 +6,7 @@ import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.Pa
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.PaginatorResponse;
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.InternalServerErrorException;
 import br.com.rhribeiro25.baseprojectspringwebflux.utils.StaticContextUtils;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @author Renan Henrique Ribeiro
  * @since 06/14/2021
  */
-@Slf4j
+@Log4j2
 public abstract class GenericConverter {
 
     private static MessageSource messageSource = StaticContextUtils.getBean(MessageSource.class);

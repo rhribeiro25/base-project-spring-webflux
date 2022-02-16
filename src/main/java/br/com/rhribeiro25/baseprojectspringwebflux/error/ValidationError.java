@@ -1,7 +1,7 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.error;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.utils.StaticContextUtils;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.validation.FieldError;
@@ -18,7 +18,7 @@ import java.util.*;
  * @author Renan Henrique Ribeiro
  * @since 06/02/2021
  */
-@Slf4j
+@Log4j2
 public class ValidationError {
 
     public static List<ParamErrorDetails> getParamErrorDetails(ConstraintViolationException ex) {

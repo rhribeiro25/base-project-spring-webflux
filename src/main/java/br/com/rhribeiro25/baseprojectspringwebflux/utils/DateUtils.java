@@ -1,6 +1,6 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.utils;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,7 +12,7 @@ import java.util.Date;
  * @author Renan Henrique Ribeiro
  * @since 06/02/2021
  */
-@Slf4j
+@Log4j2
 public class DateUtils {
     public final static String convert_YYYY_MM_DD_To_DD_MM_YYYY(String stringDate) {
         try {
