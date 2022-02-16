@@ -4,6 +4,7 @@ import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 
 @Component
+@Log4j2
 public class JwtUtil {
+
     @Value("${jwt.secret}")
     private String secret;
+
     @Value("${jwt.expiration}")
     private String expirationTime;
 
@@ -40,11 +44,17 @@ public class JwtUtil {
     }
 
     public String generateToken(UserEntity user) {
+
         HashMap<String, Object> claims = new HashMap<>();
-        claims.put("role", List.of(user.getPassword()));
+        Date creationDate = new Date();
+
+        claims.put("role", List.of(user.getRole()));
+        claims.put("email", List.of(user.getEmail()));
+        claims.put("firstName", List.of(user.getFirstName()));
+        claims.put("middleName", List.of(user.getMiddleName()));
+        claims.put("lastName", List.of(user.getLastName()));
 
         long expirationSeconds = Long.parseLong(expirationTime);
-        Date creationDate = new Date();
         Date expirationDate = new Date(creationDate.getTime() + expirationSeconds * 1000);
 
         return Jwts.builder()

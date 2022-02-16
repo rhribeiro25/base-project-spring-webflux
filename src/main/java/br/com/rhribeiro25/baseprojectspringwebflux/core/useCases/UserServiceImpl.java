@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
@@ -42,8 +41,8 @@ public class UserServiceImpl implements UserService {
         return GenericConverter.converterMonoToObjectResponse(userRepository.findByIdAndIsActivated(id, true), HttpStatus.OK);
     }
 
-    public Mono findByEmail(String email) {
-        return GenericConverter.converterMonoToObjectResponse(userRepository.findByEmail(email), HttpStatus.OK).cast(UserDetails.class);
+    public Mono<UserEntity> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     public Mono findAll(Pageable page) {

@@ -1,6 +1,7 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.config.security;
 
 import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,11 +14,10 @@ import java.util.stream.Collectors;
 
 @Component
 public class AuthenticationManager implements ReactiveAuthenticationManager {
-    private final JwtUtil jwtUtil;
 
-    public AuthenticationManager(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {

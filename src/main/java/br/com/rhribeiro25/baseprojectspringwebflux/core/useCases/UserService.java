@@ -3,7 +3,6 @@ package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPatch;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPost;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import reactor.core.publisher.Mono;
 
 /**

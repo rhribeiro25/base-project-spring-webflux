@@ -1,5 +1,6 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.config.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -11,11 +12,9 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class SecurityContextRepository implements ServerSecurityContextRepository {
-    private final AuthenticationManager authenticationManager;
 
-    public SecurityContextRepository(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Override
     public Mono<Void> save(ServerWebExchange exchange, SecurityContext context) {
