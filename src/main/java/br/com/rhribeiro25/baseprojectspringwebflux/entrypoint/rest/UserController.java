@@ -48,8 +48,7 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Mono findAll(@RequestParam(defaultValue = "0") int page,
-                        @RequestParam(defaultValue = "10") int size) {
+    public Mono findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         return userService.findAll(PageRequest.of(page, size));
     }
 
@@ -67,8 +66,7 @@ public class UserController {
 
     @PatchMapping(path = "{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono update(@PathVariable Long id,
-                       @RequestBody @Valid UserRequestPatch user) {
+    public Mono update(@PathVariable Long id, @RequestBody @Valid UserRequestPatch user) {
         return userService.updateByPatch(id, user);
     }
 

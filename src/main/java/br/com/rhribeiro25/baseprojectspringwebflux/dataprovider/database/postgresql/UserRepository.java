@@ -24,7 +24,7 @@ public interface  UserRepository extends ReactiveSortingRepository<UserEntity, L
 
     Flux<UserEntity> findAllByIsActivated(Pageable page, Boolean isActivated);
 
-    Mono<Long> count();
+    Mono<Long> countByIsActivated(Boolean isActivated);
 
     Mono<UserEntity> save(UserEntity user);
 
