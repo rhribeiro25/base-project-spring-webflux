@@ -49,10 +49,6 @@ public class JwtUtil {
         Date creationDate = new Date();
 
         claims.put("role", List.of(user.getRole()));
-        claims.put("email", List.of(user.getEmail()));
-        claims.put("firstName", List.of(user.getFirstName()));
-        claims.put("middleName", List.of(user.getMiddleName()));
-        claims.put("lastName", List.of(user.getLastName()));
 
         long expirationSeconds = Long.parseLong(expirationTime);
         Date expirationDate = new Date(creationDate.getTime() + expirationSeconds * 1000);

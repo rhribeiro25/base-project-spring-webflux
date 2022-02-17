@@ -1,7 +1,9 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.generic.GenericConverter;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viacep.AddressWebClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -18,6 +20,6 @@ public class AddressServiceImpl implements AddressService {
     private AddressWebClient viaCepWebClient;
 
     public Mono findAddressByZipcode(String cep) {
-        return viaCepWebClient.findAddressByZipcode(cep);
+        return GenericConverter.converterMonoToObjectResponse(viaCepWebClient.findAddressByZipcode(cep), HttpStatus.OK);
     }
 }

@@ -1,7 +1,7 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.entrypoint.rest;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.UserService;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.AuthService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +22,14 @@ import reactor.core.publisher.Mono;
 @RequestMapping("api/auth")
 @Validated
 @Log4j2
-public class AuthenticationController {
+public class AuthController {
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     @PostMapping("/login")
     public Mono<ResponseEntity> login(@RequestBody UserEntity user) {
-        return userService.verifyPassword(user);
+        return authService.verifyPassword(user);
     }
 
 }

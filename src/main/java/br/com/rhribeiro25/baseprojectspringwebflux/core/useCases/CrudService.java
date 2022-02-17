@@ -12,8 +12,8 @@ import reactor.core.publisher.Mono;
 public interface CrudService {
     Mono findById(Long id);
     Mono findAll(Pageable page);
-    Mono save(Object createdUser);
-    Mono updateByPut(Object updatedUser);
-    Mono updateByPatch(Long id, Object updatedUser);
+    Mono save(Object obj);
+    Mono updateByPut(Object obj);
+    Mono updateByPatch(Long id, Object obj);
     Mono delete(Long id);
 }

@@ -37,16 +37,9 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final static ResponseEntity<Object> UNAUTHORIZED =
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
     private final MessageSource messageSource;
 
     private final UserRepository userRepository;
-
 
     private final PasswordEncoder encoder;
 
@@ -70,9 +63,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public Mono save(Object createdUser) {
-        return verifyUserByEmailOrActivateUser((UserRequestPost) createdUser).switchIfEmpty(Mono.defer(() -> {
-            UserEntity user = GenericConverter.converterObjectToObject(createdUser, UserEntity.class);
+    public Mono save(Object obj) {
+        return verifyUserByEmailOrActivateUser((UserRequestPost) obj).switchIfEmpty(Mono.defer(() -> {
+            UserEntity user = GenericConverter.converterObjectToObject(obj, UserEntity.class);
             Mono<UserResponse> userResponse = this.persisteUser(user);
             return GenericConverter.converterMonoToObjectResponse(userResponse, HttpStatus.CREATED);
         }));
@@ -149,14 +142,6 @@ public class UserServiceImpl implements UserService {
             oldUser.setIsActivated(true);
             return Mono.just(oldUser);
         });
-    }
-
-    public Mono verifyPassword(UserEntity user) {
-        return this.findByEmail(user.getEmail()).map(userDb ->
-                encoder.matches(user.getPassword(), userDb.getPassword())
-                        ? ResponseEntity.ok(jwtUtil.generateToken(userDb))
-                        : UNAUTHORIZED
-        );
     }
 
     private Mono persisteUser(UserEntity user) {

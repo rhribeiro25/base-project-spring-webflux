@@ -12,8 +12,12 @@ import reactor.core.publisher.Mono;
  * @since 06/27/2021
  */
 public interface UserService extends CrudService {
+
     Mono verifyUserByEmailOrActivateUser(UserRequestPost createdUser);
+
     Mono setUserData(Long id, UserRequestPatch updatedUser);
+
     Mono<UserEntity> findByEmail(String email);
-    Mono verifyPassword(UserEntity user);
 }
+
+
