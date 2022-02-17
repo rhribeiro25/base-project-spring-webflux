@@ -18,7 +18,7 @@ ext {
     mockserverTestVersion = '5.11.2'
 }
 
-group = 'rhribeiro25'
+group = 'br.com.rhribeiro25.baseprojectspringwebflux'
 version = "${appVersion}"
 sourceCompatibility = '11'
 
@@ -119,18 +119,4 @@ test {
         includeEngines 'junit-jupiter', 'junit-vintage'
     }
     finalizedBy jacocoTestReport
-}
-
-// Docker
-task unpack(type: Copy) {
-    dependsOn bootJar
-    from(zipTree(tasks.bootJar.outputs.files.singleFile))
-    into("build/dependency")
-}
-
-docker {
-    name "${project.group}/${bootJar.baseName}"
-    tags "${bootJar.version}"
-    copySpec.from(tasks.unpack.outputs).into("dependency")
-    buildArgs(['DEPENDENCY': "dependency"])
 }
