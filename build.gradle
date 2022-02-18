@@ -7,7 +7,7 @@ plugins {
 }
 
 ext {
-    appVersion = '1.0.4'
+    appVersion = '1.0.3'
     validatorVersion = '1.7'
     contextVersion = '4.3.10.RELEASE'
     openapiVersion = '1.5.2'
@@ -18,7 +18,7 @@ ext {
     mockserverTestVersion = '5.11.2'
 }
 
-group = 'rhribeiro25'
+group = 'br.com.rhribeiro25.baseprojectspringwebflux'
 version = "${appVersion}"
 sourceCompatibility = '11'
 
@@ -33,43 +33,34 @@ repositories {
 }
 
 dependencies {
-    // SPRING PROJECTS
+    // Spring projects
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-devtools'
-
-    // POSTGRESQL REACTIVE CONNECTOR
+    // PostgreSQL Reactive Connector
     runtimeOnly 'io.r2dbc:r2dbc-postgresql'
-
-    // FLYWAY AND POSTGRESQL CONNECTOR
+    // Flyway and Postgresql Connector
     implementation 'org.flywaydb:flyway-core'
     runtimeOnly 'org.postgresql:postgresql'
-
-    // APACHE COMMONS VALIDATOR
+    // Apache Commons Validator
     implementation "commons-validator:commons-validator:${validatorVersion}"
-
-    // CONTEXT
+    // Context
     implementation 'org.springframework:spring-context'
     implementation "org.springframework:spring-context-support:${contextVersion}"
-
-    // REACTOR PROJECT
+    // Reactor project
     implementation 'io.projectreactor:reactor-tools'
     implementation 'io.projectreactor:reactor-core'
-
-    // OPENAPI
+    // Openapi
     implementation "org.springdoc:springdoc-openapi-webflux-ui:${openapiVersion}"
-
-    // LOMBOK PROJECT
+    // Lombok project
     annotationProcessor 'org.projectlombok:lombok'
     compileOnly 'org.projectlombok:lombok'
-
     // JAXB API
     implementation "javax.xml.bind:jaxb-api:${jaxbVersion}"
-
-    // TEST DEPENDENCIES
+    // Test dependencies
     implementation platform("io.projectreactor:reactor-bom:${reactorBomTestVersion}")
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
@@ -83,11 +74,13 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 }
 
-// TEST
+// Test
 check.dependsOn jacocoTestCoverageVerification
+
 jacoco {
     toolVersion = '0.8.6'
 }
+
 jacocoTestCoverageVerification {
     violationRules {
         rule {
@@ -102,6 +95,7 @@ jacocoTestCoverageVerification {
         }
     }
 }
+
 jacocoTestReport {
     dependsOn test
     reports {
@@ -115,26 +109,10 @@ jacocoTestReport {
         }))
     }
 }
+
 test {
     useJUnitPlatform {
         includeEngines 'junit-jupiter', 'junit-vintage'
     }
     finalizedBy jacocoTestReport
-}
-
-// DOCKER
-bootJar {
-    baseName = 'base-project-spring-webflux'
-    version = "${appVersion}"
-}
-task unpack(type: Copy) {
-    dependsOn bootJar
-    from(zipTree(tasks.bootJar.outputs.files.singleFile))
-    into("build/dependency")
-}
-docker {
-    name "${project.group}/${bootJar.baseName}"
-    tags "${bootJar.version}"
-    copySpec.from(tasks.unpack.outputs).into("dependency")
-    buildArgs(['DEPENDENCY': "dependency"])
 }
