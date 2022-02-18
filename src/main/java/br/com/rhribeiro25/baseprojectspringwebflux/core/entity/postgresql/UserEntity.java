@@ -1,4 +1,4 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.core.entity;
+package br.com.rhribeiro25.baseprojectspringwebflux.core.entity.postgresql;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;

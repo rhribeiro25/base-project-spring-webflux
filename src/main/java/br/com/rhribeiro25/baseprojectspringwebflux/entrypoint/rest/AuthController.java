@@ -1,6 +1,6 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.entrypoint.rest;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.postgresql.UserEntity;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.AuthService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public Mono<ResponseEntity> login(@RequestBody UserEntity user) {
-        return authService.verifyPassword(user);
+        return authService.generateToken(user);
+    }
+
+    @PostMapping("/logout")
+    public Mono logout() {
+        Mono result = authService.saveTokenInBlacklist("Authorization");
+        return result;
     }
 
 }

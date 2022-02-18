@@ -1,7 +1,8 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 
 
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.postgresql.UserEntity;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.redis.TokenEntity;
 import reactor.core.publisher.Mono;
 
 /**
@@ -11,5 +12,6 @@ import reactor.core.publisher.Mono;
  * @since 16/02/2022
  */
 public interface AuthService {
-    Mono verifyPassword(UserEntity user);
+    Mono generateToken(UserEntity user);
+    Mono saveTokenInBlacklist(String token);
 }

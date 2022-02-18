@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 import java.util.Arrays;
 
 /**
- * WebFlux configuration class
+ * WebSecurity configuration class
  *
  * @author Renan Henrique Ribeiro
  * @since 08/02/2022

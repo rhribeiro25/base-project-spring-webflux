@@ -37,6 +37,7 @@ repositories {
 
 dependencies {
     // SPRING PROJECTS
+    implementation "org.springframework.boot:spring-boot-starter-data-redis-reactive"
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -53,6 +54,9 @@ dependencies {
     // MODEL MAPPER
     implementation "org.modelmapper:modelmapper:${modelMapperVersion}"
 
+    // APACHE COMMONS VALIDATOR
+    implementation "commons-validator:commons-validator:${validatorVersion}"
+
     // POSTGRESQL REACTIVE CONNECTOR
     runtimeOnly 'io.r2dbc:r2dbc-postgresql'
 
@@ -60,8 +64,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     runtimeOnly 'org.postgresql:postgresql'
 
-    // APACHE COMMONS VALIDATOR
-    implementation "commons-validator:commons-validator:${validatorVersion}"
+
 
     // CONTEXT
     implementation 'org.springframework:spring-context'

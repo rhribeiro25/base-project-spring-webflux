@@ -13,6 +13,13 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Authentication Manager Util class
+ *
+ * @author Renan Henrique Ribeiro
+ * @since 08/02/2022
+ */
+
 @Component
 @Log4j2
 public class AuthenticationManager implements ReactiveAuthenticationManager {

@@ -1,6 +1,6 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.config.security;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.postgresql.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -12,6 +12,13 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+/**
+ * JWT Util class
+ *
+ * @author Renan Henrique Ribeiro
+ * @since 08/02/2022
+ */
 
 @Component
 @Log4j2

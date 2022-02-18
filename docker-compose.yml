@@ -45,6 +45,15 @@ services:
     depends_on:
       - pgsql
 
+  redis:
+    container_name: redis
+    image: redis
+    command: redis-server --requirepass redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - /sgbd/redis:/var/lib/redis
+
 networks:
   default:
     name: base-project-spring-webflux-net

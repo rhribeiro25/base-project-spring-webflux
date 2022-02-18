@@ -1,10 +1,8 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.entrypoint.rest;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.config.security.JwtUtil;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPatch;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPost;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPut;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +29,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @PostMapping("/login")
-    public Mono login(@RequestBody UserEntity user) {
-        return Mono.just(jwtUtil.generateToken(user));
-    }
 
     @GetMapping(path = "{id}")
     @ResponseStatus(HttpStatus.OK)

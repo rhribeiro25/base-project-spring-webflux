@@ -1,4 +1,4 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.core.entity;
+package br.com.rhribeiro25.baseprojectspringwebflux.core.entity.postgresql;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -10,6 +10,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+/**
+ * Security Context Repository class
+ *
+ * @author Renan Henrique Ribeiro
+ * @since 08/02/2022
+ */
+
 @Component
 public class SecurityContextRepository implements ServerSecurityContextRepository {
 
