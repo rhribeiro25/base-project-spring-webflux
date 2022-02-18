@@ -6,6 +6,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      - DATABASE_HOST=pgsql
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=base-project-spring-batch-db
+      - DATABASE_PORT=5432
     restart: always
     ports:
       - "9090:9090"
@@ -24,7 +30,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - ./sgbd/postgres:/var/lib/postgresql/data
 
   pgadmin:
     container_name: pgadmin
@@ -34,6 +40,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: postgres
     ports:
       - "16543:80"
+    volumes:
+      - ./sgbd/pgadmin:/var/lib/pgadmin
     depends_on:
       - pgsql
 
