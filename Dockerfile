@@ -1,7 +1,8 @@
 FROM adoptopenjdk/openjdk11:latest
+
 VOLUME /tmp
-ARG DEPENDENCY=target/dependency
-COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY ${DEPENDENCY}/META-INF /app/META-INF
-COPY ${DEPENDENCY}/BOOT-INF/classes /app
-ENTRYPOINT ["java", "-Dspring.profiles.active=prod","-cp","app:app/lib/*","br.com.rhribeiro25.baseprojectspringwebflux.BaseProjectSpringWebfluxApplication"]
+WORKDIR /build
+COPY . /build
+COPY build/libs/*.jar /app/base-project-spring-webflux.jar
+
+ENTRYPOINT ["java","-Dspring.profiles.active=prod","-jar","/app/base-project-spring-webflux.jar"]
