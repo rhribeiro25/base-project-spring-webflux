@@ -1,6 +1,5 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.config.security.JwtUtil;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPatch;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPost;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPut;
@@ -12,18 +11,15 @@ import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.BadRequestErr
 import br.com.rhribeiro25.baseprojectspringwebflux.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -83,7 +79,9 @@ public class UserServiceImpl implements UserService {
             UserEntity user = GenericConverter.converterObjectToObject(updatedUser, UserEntity.class);
             Mono<UserResponse> userResponse = this.persisteUser(user);
             return GenericConverter.converterMonoToObjectResponse(userResponse, HttpStatus.OK);
-        });
+        }).switchIfEmpty(Mono.error(new BadRequestErrorException(
+                messageSource.getMessage("message.bad.request.error.find.user", null, Locale.getDefault())))
+        );
     }
 
     @Transactional
@@ -91,7 +89,9 @@ public class UserServiceImpl implements UserService {
         return setUserData(id, ((UserRequestPatch) updatedUser)).flatMap(oldUser -> {
             Mono<UserResponse> userResponse = this.persisteUser(oldUser);
             return GenericConverter.converterMonoToObjectResponse(userResponse, HttpStatus.OK);
-        });
+        }).switchIfEmpty(Mono.error(new BadRequestErrorException(
+                messageSource.getMessage("message.bad.request.error.find.user", null, Locale.getDefault())))
+        );
     }
 
     @Transactional
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
                                     Mono.just(messageSource.getMessage("message.user.deleted.successfully", null, Locale.getDefault())), HttpStatus.OK
                             )
                     );
-        });
+        }).switchIfEmpty(Mono.error(new BadRequestErrorException(messageSource.getMessage("message.bad.request.error.find.user", null, Locale.getDefault()))));
     }
 
     public Mono verifyUserByEmailOrActivateUser(UserRequestPost createdUser) {
