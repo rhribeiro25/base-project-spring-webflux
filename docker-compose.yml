@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     restart: always
     ports:
-      - 9090:9090
+      - "9090:9090"
     volumes:
       - /tmp:/var/lib/app
     depends_on:
@@ -22,9 +22,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
-      - ./sgbd/postgres:/var/lib/postgresql/data
+      - ./data/postgres:/var/lib/postgresql/data
 
   pgadmin:
     container_name: pgadmin
@@ -33,13 +33,11 @@ services:
       PGADMIN_DEFAULT_EMAIL: rhribeiro_25@hotmail.com
       PGADMIN_DEFAULT_PASSWORD: postgres
     ports:
-      - 16543:80
-    volumes:
-      - ./sgbd/pgadmin:/var/lib/pgadmin
+      - "16543:80"
     depends_on:
       - pgsql
 
-  networks:
-    default:
-      name: base-project-spring-webflux-net
-      driver: bridge
+networks:
+  default:
+    name: base-project-spring-webflux-net
+    driver: bridge
