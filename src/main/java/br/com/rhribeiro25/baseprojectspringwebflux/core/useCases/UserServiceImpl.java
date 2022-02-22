@@ -6,7 +6,7 @@ import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserR
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.response.UserResponse;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.generic.GenericConverter;
-import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.UserRepository;
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.postgresql.UserRepository;
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.BadRequestErrorException;
 import br.com.rhribeiro25.baseprojectspringwebflux.utils.StringUtils;
 import lombok.RequiredArgsConstructor;

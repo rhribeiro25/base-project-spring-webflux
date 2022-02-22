@@ -1,14 +1,14 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.core.entity;
+package br.com.rhribeiro25.baseprojectspringwebflux.core.document;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * Class Black-List Entity
+ * Class Black-List Document
  *
  * @author Renan Henrique Ribeiro
  * @since 18/02/2022
@@ -17,11 +17,11 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table("black_list")
-public class AuthEntity implements GenericEntity {
+@Document("black_list")
+public class AuthDocument implements GenericDocument {
 
     @Id
-    private Long id;
+    private String id;
 
     private String token;
 }

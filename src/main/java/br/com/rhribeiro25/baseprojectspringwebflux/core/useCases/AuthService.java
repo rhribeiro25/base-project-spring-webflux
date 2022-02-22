@@ -1,8 +1,8 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 
 
+import br.com.rhribeiro25.baseprojectspringwebflux.core.document.AuthDocument;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.AuthEntity;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -14,6 +14,6 @@ import reactor.core.publisher.Mono;
  */
 public interface AuthService {
     Mono generateToken(UserEntity user);
-    Mono saveTokenInBlacklist(AuthEntity auth);
+    Mono saveTokenInBlacklist(AuthDocument auth);
     Flux findAll();
 }

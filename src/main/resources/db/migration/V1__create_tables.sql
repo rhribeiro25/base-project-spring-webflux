@@ -12,8 +12,3 @@ CREATE TABLE IF NOT EXISTS users (
 	created_at TIMESTAMP NOT NULL,
 	updated_at TIMESTAMP NOT NULL,
 	CONSTRAINT user_pk PRIMARY KEY (id));
-
-CREATE TABLE IF NOT EXISTS black_list (
-    id bigint GENERATED ALWAYS AS IDENTITY,
-    token VARCHAR(255) NOT NULL,
-    CONSTRAINT black_list_pk PRIMARY KEY (id));

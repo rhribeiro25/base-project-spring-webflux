@@ -1,9 +1,9 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.config.security.JwtUtil;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.document.AuthDocument;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.AuthEntity;
-import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.BlackListRepository;
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.mongodb.BlackListRepository;
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.BadRequestErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -55,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
         });
     }
 
-    public Mono saveTokenInBlacklist(AuthEntity auth) {
+    public Mono saveTokenInBlacklist(AuthDocument auth) {
         return blackListRepository.existsByToken(auth.getToken()).flatMap(exists -> {
             if (!exists) return blackListRepository.save(auth).map(token ->
                     ResponseEntity.ok(messageSource.getMessage("message.token.blocked.successfully", null, Locale.getDefault())));

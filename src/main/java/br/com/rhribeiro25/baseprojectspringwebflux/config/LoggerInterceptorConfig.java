@@ -139,12 +139,9 @@ public class LoggerInterceptorConfig {
         Map<String, String> body = new HashMap<>();
         body.put("Class", joinPoint.getSignature().getDeclaringTypeName());
         body.put("Method", joinPoint.getSignature().getName() + "()");
-        if (result != null)
-            body.put("Payload", mapper.writeValueAsString(result));
-        else if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0)
+        if (result != null) body.put("Payload", mapper.writeValueAsString(result));
+        if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0)
             body.put("Payload", mapper.writeValueAsString(mapper.writeValueAsString(joinPoint.getArgs()[0])));
-        else
-            body.put("Payload", "");
         if (start != null) body.put("Time", String.valueOf(System.currentTimeMillis() - start) + " ms");
         return body;
     }
