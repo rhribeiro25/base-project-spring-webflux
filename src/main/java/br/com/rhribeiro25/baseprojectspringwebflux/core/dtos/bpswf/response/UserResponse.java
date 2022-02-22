@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 /**
  * Class DTO User Response
@@ -24,4 +28,6 @@ public class UserResponse {
     private String email;
     private String phone;
     private String role;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

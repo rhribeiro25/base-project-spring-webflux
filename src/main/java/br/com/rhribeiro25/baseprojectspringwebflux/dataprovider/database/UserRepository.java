@@ -1,6 +1,6 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.postgresql;
+package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.postgresql.UserEntity;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.reactive.ReactiveSortingRepository;
 import org.springframework.stereotype.Repository;

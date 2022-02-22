@@ -1,6 +1,6 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.config.security;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.postgresql.UserEntity;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

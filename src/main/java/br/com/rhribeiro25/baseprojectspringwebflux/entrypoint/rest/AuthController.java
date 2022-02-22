@@ -1,15 +1,14 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.entrypoint.rest;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.postgresql.UserEntity;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.AuthEntity;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.AuthService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -19,7 +18,7 @@ import reactor.core.publisher.Mono;
  * @since 15/02/2022
  */
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("api/auths")
 @Validated
 @Log4j2
 public class AuthController {
@@ -33,9 +32,13 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public Mono logout() {
-        Mono result = authService.saveTokenInBlacklist("Authorization");
-        return result;
+    public Mono<ResponseEntity> logout(@RequestBody AuthEntity auth) {
+        return authService.saveTokenInBlacklist(auth);
+    }
+
+    @GetMapping
+    public Flux logout() {
+        return authService.findAll();
     }
 
 }

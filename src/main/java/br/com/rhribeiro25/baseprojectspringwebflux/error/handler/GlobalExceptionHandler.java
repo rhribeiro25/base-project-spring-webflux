@@ -44,9 +44,9 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
     private MessageSource messageSource;
 
     public GlobalExceptionHandler(ErrorAttributes errorAttributes,
-        ResourceProperties resourceProperties,
-        ApplicationContext applicationContext,
-        ServerCodecConfigurer codecConfigurer) {
+                                  ResourceProperties resourceProperties,
+                                  ApplicationContext applicationContext,
+                                  ServerCodecConfigurer codecConfigurer) {
         super(errorAttributes, resourceProperties, applicationContext);
         this.setMessageWriters(codecConfigurer.getWriters());
     }
@@ -57,13 +57,15 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
     }
 
     private Mono<ServerResponse> formatErrorResponse(ServerRequest request) {
+        String msg = null;
         String query = request.uri().getQuery();
         ErrorAttributeOptions errorAttributeOptions = isTraceEnabled(query) ? of(Include.STACK_TRACE) : defaults();
 
         Map<String, Object> errorAttributesMap = getErrorAttributes(request, errorAttributeOptions);
         int status = (int) Optional.ofNullable(errorAttributesMap.get("status")).orElse(500);
-        String msg = errorAttributesMap.get("message").toString();
-        if(status == 500) {
+        if (errorAttributesMap.get("message") != null)
+            errorAttributesMap.get("message").toString();
+        if (status == 500) {
             msg = messageSource.getMessage("message.internal.server.error", null, Locale.getDefault());
         }
         Error error = Error.builder().statusCode(status)
@@ -73,9 +75,9 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
                 .build();
         log.error(error.getError().getMessage());
         return ServerResponse
-            .status(status)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(BodyInserters.fromValue(error));
+                .status(status)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(error));
     }
 
     private boolean isTraceEnabled(String query) {

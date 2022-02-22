@@ -1,4 +1,4 @@
-package br.com.rhribeiro25.baseprojectspringwebflux.core.entity.postgresql;
+package br.com.rhribeiro25.baseprojectspringwebflux.core.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +23,16 @@ import java.time.LocalDateTime;
 @Builder
 @Table("users")
 public class UserEntity implements GenericEntity {
+
     @Id
     private Long id;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
     private String firstName;
     private String middleName;
     private String lastName;
@@ -34,8 +42,5 @@ public class UserEntity implements GenericEntity {
     private String phone;
     private String role;
     private Boolean isActivated = true;
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+
 }

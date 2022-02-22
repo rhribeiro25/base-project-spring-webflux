@@ -50,52 +50,47 @@ public class LoggerInterceptorConfig {
 
     private Mono logMonoResult(ProceedingJoinPoint joinPoint, long start, Mono result) {
         AtomicReference<String> traceId = new AtomicReference<>("");
-        return result
-                .doOnSuccess(o -> {
-                    setTraceIdInMDC(traceId);
-                    var response = Objects.nonNull(o) ? o.toString() : "";
-                    try {
-                        logRequest(joinPoint);
-                        logResponse(joinPoint, start, response);
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-                })
-                .subscriberContext(context -> {
-                    // the error happens in a different thread, so get the trace from context, set in MDC and downstream to doOnError
-                    setTraceIdFromContext(traceId, (Context) context);
-                    return context;
-                })
-                .doOnError(o -> {
-                    setTraceIdInMDC(traceId);
-                    try {
-                        logRequest(joinPoint);
-                        logError(joinPoint, start, o.toString());
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-                });
+        return result.doOnSuccess(o -> {
+            setTraceIdInMDC(traceId);
+            var response = Objects.nonNull(o) ? o.toString() : "";
+            try {
+                logRequest(joinPoint);
+                logResponse(joinPoint, start, response);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }).subscriberContext(context -> {
+            // the error happens in a different thread, so get the trace from context, set in MDC and downstream to doOnError
+            setTraceIdFromContext(traceId, (Context) context);
+            return context;
+        }).doOnError(o -> {
+            setTraceIdInMDC(traceId);
+            try {
+                logRequest(joinPoint);
+                logError(joinPoint, start, o.toString());
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        });
 
     }
 
     private Flux logFluxResult(ProceedingJoinPoint joinPoint, long start, Flux result) {
-        return result
-                .doFinally(o -> {
-                    try {
-                        logRequest(joinPoint);
-                        logResponse(joinPoint, start, o.toString()); // NOTE: this is costly
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-                })
-                .doOnError(o -> {
-                    try {
-                        logRequest(joinPoint);
-                        logError(joinPoint, start, o.toString());
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-                });
+        return result.doFinally(o -> {
+            try {
+                logRequest(joinPoint);
+                logResponse(joinPoint, start, o.toString()); // NOTE: this is costly
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }).doOnError(o -> {
+            try {
+                logRequest(joinPoint);
+                logError(joinPoint, start, o.toString());
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void logResult(ProceedingJoinPoint joinPoint, long start, Object result) throws JsonProcessingException {
@@ -144,8 +139,12 @@ public class LoggerInterceptorConfig {
         Map<String, String> body = new HashMap<>();
         body.put("Class", joinPoint.getSignature().getDeclaringTypeName());
         body.put("Method", joinPoint.getSignature().getName() + "()");
-        if (result != null) body.put("Payload", mapper.writeValueAsString(result));
-        else body.put("Payload", mapper.writeValueAsString(joinPoint.getArgs()[0]));
+        if (result != null)
+            body.put("Payload", mapper.writeValueAsString(result));
+        else if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0)
+            body.put("Payload", mapper.writeValueAsString(mapper.writeValueAsString(joinPoint.getArgs()[0])));
+        else
+            body.put("Payload", "");
         if (start != null) body.put("Time", String.valueOf(System.currentTimeMillis() - start) + " ms");
         return body;
     }
