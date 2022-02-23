@@ -1,5 +1,6 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.config.security;
 
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.mongodb.BlackListRepository;
 import io.jsonwebtoken.Claims;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,35 +25,40 @@ import java.util.stream.Collectors;
 @Log4j2
 public class AuthenticationManager implements ReactiveAuthenticationManager {
 
-
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private BlackListRepository blackListRepository;
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
         String authToken = authentication.getCredentials().toString();
-        String email;
-        try {
-            email = jwtUtil.extractEmail(authToken);
-        } catch (Exception e) {
-            email = null;
-            log.error(e.getMessage());
-        }
-        if (email != null && jwtUtil.validateToken(authToken)) {
-            Claims claims = jwtUtil.getClaimsFromToken(authToken);
-            List<String> role = claims.get("role", List.class);
-            List<SimpleGrantedAuthority> authorities = role.stream()
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    email,
-                    null,
-                    authorities
-            );
+        return blackListRepository.existsByToken(authToken).flatMap(existsInBlackList -> {
+            String email;
+            try {
+                email = jwtUtil.extractEmail(authToken);
+            } catch (Exception e) {
+                email = null;
+                log.error(e.getMessage());
+            }
+            if (email != null && jwtUtil.validateToken(authToken) && !existsInBlackList) {
+                Claims claims = jwtUtil.getClaimsFromToken(authToken);
+                List<String> role = claims.get("role", List.class);
+                List<SimpleGrantedAuthority> authorities = role.stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                        email,
+                        null,
+                        authorities
+                );
 
-            return Mono.just(authenticationToken);
-        } else {
-            return Mono.empty();
-        }
+                return Mono.just(authenticationToken);
+            } else {
+                return Mono.empty();
+            }
+        });
+
     }
 }

@@ -4,6 +4,7 @@ import br.com.rhribeiro25.baseprojectspringwebflux.core.document.AuthDocument;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.AuthService;
 import lombok.extern.log4j.Log4j2;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -33,8 +34,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public Mono logout(@RequestHeader Map<String, String> headers) {
-        AuthDocument auth = AuthDocument.builder().token(headers.get("Authorization")).build();
+    public Mono logout(@NotNull @RequestHeader Map<String, String> headers) {
+        AuthDocument auth = AuthDocument.builder().token(headers.get("Authorization").replace("Bearer ", "")).build();
         return authService.saveTokenInBlacklist(auth);
     }
 
