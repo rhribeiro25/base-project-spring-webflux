@@ -15,5 +15,4 @@ import reactor.core.publisher.Mono;
 public interface AuthService {
     Mono generateToken(UserEntity user);
     Mono saveTokenInBlacklist(AuthDocument auth);
-    Flux findAll();
 }

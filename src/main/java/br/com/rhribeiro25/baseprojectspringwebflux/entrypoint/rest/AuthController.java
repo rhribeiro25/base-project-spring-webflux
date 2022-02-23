@@ -8,8 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Map;
 
 /**
  * Class Authentication Controller
@@ -32,13 +33,9 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public Mono<ResponseEntity> logout(@RequestBody AuthDocument auth) {
+    public Mono logout(@RequestHeader Map<String, String> headers) {
+        AuthDocument auth = AuthDocument.builder().token(headers.get("Authorization")).build();
         return authService.saveTokenInBlacklist(auth);
-    }
-
-    @GetMapping
-    public Flux logout() {
-        return authService.findAll();
     }
 
 }
