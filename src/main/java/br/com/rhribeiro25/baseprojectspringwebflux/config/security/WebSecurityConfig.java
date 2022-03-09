@@ -57,14 +57,21 @@ public class WebSecurityConfig {
                 .authenticationManager(authenticationManager)
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
+                // Swagger
+                .pathMatchers(HttpMethod.GET, "/swagger-ui.html").permitAll()
+                .pathMatchers(HttpMethod.GET, "/webjars/**").permitAll()
+                .pathMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
+                // Authentication
                 .pathMatchers(HttpMethod.POST, "/api/auths/login").permitAll()
                 .pathMatchers(HttpMethod.POST, "/api/auths/logout").authenticated()
+                // User CRUD
                 .pathMatchers(HttpMethod.GET, "/api/users*").authenticated()
                 .pathMatchers(HttpMethod.GET, "/api/users/*").authenticated()
                 .pathMatchers(HttpMethod.POST, "/api/users").hasAuthority("ADMIN")
                 .pathMatchers(HttpMethod.PUT, "/api/users").hasAuthority("ADMIN")
                 .pathMatchers(HttpMethod.PATCH, "/api/users/*").hasAuthority("ADMIN")
                 .pathMatchers(HttpMethod.DELETE, "/api/users/*").hasAuthority("ADMIN")
+                // Address
                 .pathMatchers(HttpMethod.GET, "/api/addresses*").authenticated()
                 .and()
                 .cors()

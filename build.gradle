@@ -19,6 +19,7 @@ ext {
     modelMapperVersion = "2.4.4"
     jacksonDateTypeVersion = "2.12.3"
     jwtVersion = "0.11.1"
+    swaggerVersion = "2.0.30"
 }
 
 group = 'rhribeiro25'
@@ -64,7 +65,6 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     runtimeOnly 'org.postgresql:postgresql'
 
-
     // CONTEXT
     implementation 'org.springframework:spring-context'
     implementation "org.springframework:spring-context-support:${contextVersion}"
@@ -75,6 +75,9 @@ dependencies {
 
     // OPENAPI
     implementation "org.springdoc:springdoc-openapi-webflux-ui:${openapiVersion}"
+
+    // SWAGGER-PARSER
+    implementation "io.swagger.parser.v3:swagger-parser:${swaggerVersion}"
 
     // LOMBOK PROJECT
     annotationProcessor 'org.projectlombok:lombok'

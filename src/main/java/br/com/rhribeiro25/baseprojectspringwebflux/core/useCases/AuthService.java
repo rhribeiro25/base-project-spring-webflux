@@ -2,8 +2,7 @@ package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 
 
 import br.com.rhribeiro25.baseprojectspringwebflux.core.document.AuthDocument;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
-import reactor.core.publisher.Flux;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestLogin;
 import reactor.core.publisher.Mono;
 
 /**
@@ -13,6 +12,7 @@ import reactor.core.publisher.Mono;
  * @since 16/02/2022
  */
 public interface AuthService {
-    Mono generateToken(UserEntity user);
+    Mono generateToken(UserRequestLogin user);
+
     Mono saveTokenInBlacklist(AuthDocument auth);
 }

@@ -1,0 +1,803 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "base-project-spring-webflux",
+    "description": "The project is responsible for demonstrating how to program reactively using Java and Spring WebFlux.",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "rhribeiro_25@hotmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9090/"
+    },
+    {
+      "url": "{protocol}://example-server-dev/",
+      "variables": {
+        "protocol": {
+          "enum": [
+            "http",
+            "https"
+          ],
+          "default": "http"
+        }
+      }
+    },
+    {
+      "url": "{protocol}://example-server-hml/",
+      "variables": {
+        "protocol": {
+          "enum": [
+            "http",
+            "https"
+          ],
+          "default": "http"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Operations focused on the authentication system"
+    },
+    {
+      "name": "User",
+      "description": "Operations focused on the User CRUD system"
+    },
+    {
+      "name": "Postal",
+      "description": "Operations focused on the postal system"
+    }
+  ],
+  "paths": {
+    "/api/auths/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "User Authentication",
+        "description": "User authentication",
+        "operationId": "login",
+        "requestBody": {
+          "description": "Credentials to login",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRequestLogin"
+              },
+              "example": {
+                "email": "rhribeiro_25@hotmail.com",
+                "password": "1234Re#@"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/auths/logout": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Invalidating token",
+        "description": "Invalidating token",
+        "operationId": "logout",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example Successful": {
+                    "value": {
+                      "statusCode": 200,
+                      "data": "Token bloqueado com sucesso!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "User"
+        ],
+        "summary": "Save a new user",
+        "description": "Save a new user",
+        "operationId": "saveUser",
+        "requestBody": {
+          "description": "User object to save",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRequestPost"
+              },
+              "example": {
+                "firstName": "Renan",
+                "middleName": "Henrique",
+                "lastName": "Ribeiro",
+                "motherName": null,
+                "email": "example@hotmail.com",
+                "password": "123456*As",
+                "phone": "(35) 9 9163-7942",
+                "role": "ADMIN",
+                "createdAt": "2022-03-01T01:00:00:001Z",
+                "updatedAt": "2022-03-01T01:00:00:001Z"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example Successful": {
+                    "value": {
+                      "statusCode": 201,
+                      "data": {
+                        "id": 1,
+                        "firstName": "Renan",
+                        "middleName": "Henrique",
+                        "lastName": "Ribeiro",
+                        "motherName": null,
+                        "email": "example@hotmail.com",
+                        "password": "1234Re#@",
+                        "phone": "(35) 9 9163-7942",
+                        "role": "ADMIN",
+                        "createdAt": "2022-03-01T01:00:00:001Z",
+                        "updatedAt": "2022-03-01T01:00:00:001Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "User"
+        ],
+        "summary": "Update a new user",
+        "description": "updating a user",
+        "operationId": "partialUpdateUser",
+        "requestBody": {
+          "description": "User object to update",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRequestPut"
+              },
+              "example": {
+                "id": 4,
+                "firstName": "Renan",
+                "middleName": "Henrique",
+                "lastName": "Ribeiro",
+                "motherName": null,
+                "email": "example@hotmail.com",
+                "password": "123456*As",
+                "phone": "(35) 9 9163-7942",
+                "role": "ADMIN",
+                "createdAt": "2022-03-01T01:00:00:001Z",
+                "updatedAt": "2022-03-01T01:00:00:001Z"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example Successful": {
+                    "value": {
+                      "statusCode": 201,
+                      "data": {
+                        "id": 1,
+                        "firstName": "Renan",
+                        "middleName": "Henrique",
+                        "lastName": "Ribeiro",
+                        "motherName": null,
+                        "email": "example@hotmail.com",
+                        "password": "1234Re#@",
+                        "phone": "(35) 9 9163-7942",
+                        "role": "ADMIN",
+                        "createdAt": "2022-03-01T01:00:00:001Z",
+                        "updatedAt": "2022-03-01T01:00:00:001Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "User"
+        ],
+        "summary": "Find all users",
+        "description": "Find all users",
+        "operationId": "findUsers",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Paging to partially list users",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size to partially list users",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example Successful ": {
+                    "value": {
+                      "statusCode": 200,
+                      "data": {
+                        "list": [
+                          {
+                            "id": "1",
+                            "firstName": "Renan",
+                            "middleName": "Henrique",
+                            "lastName": "Ribeiro",
+                            "motherName": null,
+                            "email": "rhribeiro_25@hotmail.com",
+                            "phone": "(35) 9 9163-7942",
+                            "role": "ADMIN",
+                            "createdAt": "2022-03-01T01:00:00:001Z",
+                            "updatedAt": "2022-03-01T01:00:00:001Z"
+                          },
+                          {
+                            "id": "2",
+                            "firstName": "Tiago",
+                            "middleName": "Poliano",
+                            "lastName": "Ribeiro",
+                            "motherName": null,
+                            "email": "tiago2015@hotmail.com",
+                            "phone": "(35) 9 9163-7954",
+                            "role": "ADMIN",
+                            "createdAt": "2022-03-01T01:00:00:001Z",
+                            "updatedAt": "2022-03-01T01:00:00:001Z"
+                          }
+                        ],
+                        "pageInfo": {
+                          "currentPage": 1,
+                          "pageCount": 1,
+                          "pageSize": 10,
+                          "count": 2
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "User"
+        ],
+        "summary": "Find user by ID",
+        "description": "Find an user by ID",
+        "operationId": "findUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The user id that needs to be finded.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example Successful ": {
+                    "value": {
+                      "statusCode": 200,
+                      "data": {
+                        "id": "1",
+                        "firstName": "Renan",
+                        "middleName": "Henrique",
+                        "lastName": "Ribeiro",
+                        "motherName": null,
+                        "email": "rhribeiro_25@hotmail.com",
+                        "phone": "(35) 9 9163-7942",
+                        "role": "ADMIN",
+                        "createdAt": "2022-03-01T01:00:00:001Z",
+                        "updatedAt": "2022-03-01T01:00:00:001Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "patch": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "User"
+        ],
+        "summary": "Partially update a user by ID",
+        "description": "Updating a user",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The user id that needs to be updated. Use user model for testing.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "User object to save",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRequestPatch"
+              },
+              "example": {
+                "email": "example@hotmail.com",
+                "password": "1234Re#@"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example Successful": {
+                    "value": {
+                      "statusCode": 201,
+                      "data": {
+                        "id": "1",
+                        "firstName": "Renan",
+                        "middleName": "Henrique",
+                        "lastName": "Ribeiro",
+                        "motherName": null,
+                        "email": "example@hotmail.com",
+                        "phone": "(35) 9 9163-7942",
+                        "role": "ADMIN",
+                        "createdAt": "2022-03-01T01:00:00:001Z",
+                        "updatedAt": "2022-03-01T01:00:00:001Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "User"
+        ],
+        "summary": "Delete a user by ID",
+        "description": "Deleting a user",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The user id that needs to be deleted.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example Successful ": {
+                    "value": {
+                      "statusCode": 200,
+                      "data": "Usuário deletado com sucesso!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/addresses": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Postal"
+        ],
+        "summary": "Find Address by CEP",
+        "description": "Find an Address by CEP",
+        "operationId": "findAddress",
+        "parameters": [
+          {
+            "name": "cep",
+            "in": "query",
+            "description": "cep to find address",
+            "schema": {
+              "type": "string",
+              "default": "37500-005"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example Successful": {
+                    "value": {
+                      "statusCode": 200,
+                      "data": {
+                        "zipCode": "37500-005",
+                        "street": "Rua Coronel Francisco Braz",
+                        "complement": "até 414/415",
+                        "district": "Centro",
+                        "city": "Itajubá"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserRequestLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "UserRequestPatch": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "motherName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "USER"
+            ]
+          }
+        }
+      },
+      "UserRequestPost": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "motherName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "USER"
+            ]
+          }
+        }
+      },
+      "UserRequestPut": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "motherName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "USER"
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}

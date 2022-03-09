@@ -1,7 +1,7 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.entrypoint.rest;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.core.document.AuthDocument;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestLogin;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.AuthService;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +29,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public Mono<ResponseEntity> login(@RequestBody UserEntity user) {
+    public Mono<ResponseEntity> login(@RequestBody UserRequestLogin user) {
         return authService.generateToken(user);
     }
 

@@ -2,7 +2,7 @@ package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 
 import br.com.rhribeiro25.baseprojectspringwebflux.config.security.JwtUtil;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.document.AuthDocument;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestLogin;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.generic.GenericConverter;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.database.mongodb.BlackListRepository;
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.BadRequestErrorException;
@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public Mono generateToken(UserEntity user) {
+    public Mono generateToken(UserRequestLogin user) {
         return userService.findByEmail(user.getEmail()).map(userDb -> {
 
             HttpHeaders headers = new HttpHeaders();

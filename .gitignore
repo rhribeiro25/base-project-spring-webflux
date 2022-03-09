@@ -10,7 +10,7 @@ sgbd/
 
 # Log file
 *.log
-logs/
+src/main/resources/files/logs/
 
 ### STS ###
 .apt_generated

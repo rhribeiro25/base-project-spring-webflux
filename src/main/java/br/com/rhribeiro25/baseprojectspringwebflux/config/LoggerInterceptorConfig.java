@@ -140,7 +140,7 @@ public class LoggerInterceptorConfig {
         body.put("Class", joinPoint.getSignature().getDeclaringTypeName());
         body.put("Method", joinPoint.getSignature().getName() + "()");
         if (result != null) body.put("Payload", mapper.writeValueAsString(result));
-        if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0)
+        if (joinPoint.getArgs() != null && joinPoint.getArgs().length == 1)
             body.put("Payload", mapper.writeValueAsString(mapper.writeValueAsString(joinPoint.getArgs()[0])));
         if (start != null) body.put("Time", String.valueOf(System.currentTimeMillis() - start) + " ms");
         return body;
