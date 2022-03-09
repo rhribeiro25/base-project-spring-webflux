@@ -49,15 +49,15 @@
   "tags": [
     {
       "name": "Authentication",
-      "description": "Operations focused on the authentication system"
+      "description": "Operations focused in the authentication services"
     },
     {
       "name": "User",
-      "description": "Operations focused on the User CRUD system"
+      "description": "Operations focused in the User services"
     },
     {
-      "name": "Postal",
-      "description": "Operations focused on the postal system"
+      "name": "Address",
+      "description": "Operations focused in the Address services"
     }
   ],
   "paths": {
@@ -611,7 +611,7 @@
           }
         ],
         "tags": [
-          "Postal"
+          "Address"
         ],
         "summary": "Find Address by CEP",
         "description": "Find an Address by CEP",
