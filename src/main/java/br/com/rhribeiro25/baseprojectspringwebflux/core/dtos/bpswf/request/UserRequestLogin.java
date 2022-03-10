@@ -19,10 +19,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserRequestLogin {
 
-    @EmailConstraint(require = false)
+    @EmailConstraint
     private String email;
 
-    @PasswordConstraint(require = false)
+    @PasswordConstraint
     private String password;
 
 }

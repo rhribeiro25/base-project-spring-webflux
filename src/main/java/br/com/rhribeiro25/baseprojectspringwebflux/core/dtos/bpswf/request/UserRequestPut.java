@@ -10,7 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 @Builder
 public class UserRequestPut {
 
+    @NotNull
     private Long id;
 
     @NameConstraint(person = "Usuário(a)", field = "first")
