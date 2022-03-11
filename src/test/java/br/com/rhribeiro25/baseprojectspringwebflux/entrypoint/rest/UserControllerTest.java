@@ -7,8 +7,6 @@ import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserR
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.ObjectResponse;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.PaginatorResponse;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.UserService;
-import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.BadRequestErrorException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +36,7 @@ public class UserControllerTest {
 
 
     @BeforeEach
-    public void setUp() throws BadRequestErrorException, JsonProcessingException {
+    public void setUp() {
 
         BDDMockito.mock(UserController.class);
 
@@ -81,7 +79,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("find User By Id -> Success With Result")
-    public void findByIdUserSucessWithResult() throws JsonProcessingException {
+    public void findByIdUserSucessWithResult() {
         Mono result = userController.findById(1l);
         StepVerifier.create(result)
                 .expectSubscription()
@@ -94,7 +92,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("find All User  -> Success With Result")
-    public void findAllUserSucessWithResult() throws JsonProcessingException {
+    public void findAllUserSucessWithResult() {
         Mono result = userController.findAll(0, 5);
         StepVerifier.create(result)
                 .expectSubscription()
@@ -107,7 +105,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("create User  -> Success With Result")
-    public void createUserSucessWithResult() throws JsonProcessingException {
+    public void createUserSucessWithResult() {
         Mono result = userController.save(userRequestPost);
         StepVerifier.create(result)
                 .expectSubscription()
@@ -120,7 +118,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("update all fields of User -> Success With Result")
-    public void updateUserByPutSucessWithResult() throws JsonProcessingException {
+    public void updateUserByPutSucessWithResult() {
         Mono result = userController.updateByPut(userRequestPut);
         StepVerifier.create(result)
                 .expectSubscription()
@@ -133,7 +131,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("update specific field of User -> Success With Result")
-    public void updateUserByPatchSucessWithResult() throws JsonProcessingException {
+    public void updateUserByPatchSucessWithResult() {
         Mono result = userController.updateByPatch(1L, userRequestPatch);
         StepVerifier.create(result)
                 .expectSubscription()
@@ -146,7 +144,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("delete User -> Success With Result")
-    public void deleteUserSucessWithResult() throws JsonProcessingException {
+    public void deleteUserSucessWithResult() {
         Mono result = userController.delete(1l);
 
         StepVerifier.create(result)

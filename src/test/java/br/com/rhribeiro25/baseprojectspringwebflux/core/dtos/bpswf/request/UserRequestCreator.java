@@ -4,13 +4,6 @@ import java.time.LocalDateTime;
 
 public class UserRequestCreator {
 
-    public static UserRequestLogin createUserRequestLogin() {
-        return UserRequestLogin.builder()
-                .email("email@dasa.com.br")
-                .password("1234%sS")
-                .build();
-    }
-
     public static UserRequestPatch createUserRequestPatch() {
         return UserRequestPatch.builder()
                 .firstName("Jeferson")
