@@ -50,13 +50,13 @@ public class UserController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public Mono update(@RequestBody @Valid UserRequestPut user) {
+    public Mono updateByPut(@RequestBody @Valid UserRequestPut user) {
         return userService.updateByPut(user);
     }
 
     @PatchMapping(path = "{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono update(@PathVariable Long id, @RequestBody @Valid UserRequestPatch user) {
+    public Mono updateByPatch(@PathVariable Long id, @RequestBody @Valid UserRequestPatch user) {
         return userService.updateByPatch(id, user);
     }
 

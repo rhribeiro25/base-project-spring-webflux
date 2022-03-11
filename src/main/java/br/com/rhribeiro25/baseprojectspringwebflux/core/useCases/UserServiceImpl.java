@@ -11,6 +11,7 @@ import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.BadRequestErr
 import br.com.rhribeiro25.baseprojectspringwebflux.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -33,11 +34,14 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final MessageSource messageSource;
+    @Autowired
+    private MessageSource messageSource;
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    private final PasswordEncoder encoder;
+    @Autowired
+    private PasswordEncoder encoder;
 
     public Mono<UserEntity> findByEmail(String email) {
         return userRepository.findByEmail(email);
