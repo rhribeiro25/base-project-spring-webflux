@@ -4,7 +4,6 @@ import br.com.rhribeiro25.baseprojectspringwebflux.core.document.AuthDocument;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.AuthRequestCreator;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestLogin;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.ObjectResponse;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.PaginatorResponse;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,8 +28,6 @@ public class AuthControllerTest {
     @Mock
     private AuthService authService;
 
-    private final Object objectResponse = ObjectResponse.builder().build();
-    private final Object paginatorResponse = PaginatorResponse.builder().build();
     private final UserRequestLogin userRequestLogin = AuthRequestCreator.createUserRequestLogin();
     private final AuthDocument authDocument = AuthRequestCreator.createAuthDocument();
 
@@ -38,7 +35,7 @@ public class AuthControllerTest {
     @BeforeEach
     public void setUp() {
 
-        BDDMockito.mock(UserController.class);
+        BDDMockito.mock(AuthController.class);
 
         BDDMockito.given(authService.generateToken(userRequestLogin))
                 .willReturn(Mono.just(ObjectResponse.builder()
