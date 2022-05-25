@@ -4,12 +4,14 @@ import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserR
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPost;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPut;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.UserService;
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.generic.GenericConverter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -30,16 +32,22 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private GenericConverter genericConverter;
+
     @GetMapping(path = "{id}")
     @ResponseStatus(HttpStatus.OK)
     public Mono findById(@PathVariable Long id) {
-        return userService.findById(id);
+        return genericConverter.converterMonoToObjectResponse(userService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Mono findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        return userService.findAll(PageRequest.of(page, size));
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Flux userResponseList = userService.findAll(pageRequest);
+        Mono<Long> count = userService.countByIsActivated(true);
+        return genericConverter.converterFluxToPaginatorResponse(userResponseList, pageRequest, count);
     }
 
     @PostMapping()

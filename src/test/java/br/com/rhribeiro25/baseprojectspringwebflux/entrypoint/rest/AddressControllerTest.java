@@ -27,10 +27,8 @@ public class AddressControllerTest {
     @BeforeEach
     public void setUp() {
 
-        BDDMockito.mock(AddressController.class);
-
-        BDDMockito.given(addressService.findAddressByZipcode("37500-000"))
-                .willReturn(Mono.just(ObjectResponse.builder()
+        BDDMockito.when(addressService.findAddressByZipcode("37500-000"))
+                .thenReturn(Mono.just(ObjectResponse.builder()
                         .data(objectResponse)
                         .statusCode(200)
                         .build()));

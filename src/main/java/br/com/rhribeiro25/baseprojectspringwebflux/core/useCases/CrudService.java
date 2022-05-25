@@ -1,6 +1,8 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.response.UserResponse;
 import org.springframework.data.domain.Pageable;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -11,7 +13,7 @@ import reactor.core.publisher.Mono;
  */
 public interface CrudService {
     Mono findById(Long id);
-    Mono findAll(Pageable page);
+    Flux findAll(Pageable page);
     Mono save(Object obj);
     Mono updateByPut(Object obj);
     Mono updateByPatch(Long id, Object obj);

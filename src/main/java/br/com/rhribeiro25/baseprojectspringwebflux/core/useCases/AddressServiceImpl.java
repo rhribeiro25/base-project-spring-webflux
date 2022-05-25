@@ -27,10 +27,14 @@ public class AddressServiceImpl implements AddressService {
     @Autowired
     private AddressWebClient viaCepWebClient;
 
-    private final MessageSource messageSource;
+    @Autowired
+    private GenericConverter genericConverter;
+
+    @Autowired
+    private MessageSource messageSource;
 
     public Mono findAddressByZipcode(String cep) {
-        return GenericConverter.converterMonoToObjectResponse(viaCepWebClient.findAddressByZipcode(cep), HttpStatus.OK)
+        return genericConverter.converterMonoToObjectResponse(viaCepWebClient.findAddressByZipcode(cep), HttpStatus.OK)
                 .switchIfEmpty(Mono.error(new NotFoundErrorException(messageSource.getMessage("message.not.found.error.address", null, Locale.getDefault()))));
     }
 }

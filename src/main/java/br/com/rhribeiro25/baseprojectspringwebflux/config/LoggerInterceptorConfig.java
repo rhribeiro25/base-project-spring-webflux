@@ -57,7 +57,7 @@ public class LoggerInterceptorConfig {
                 logRequest(joinPoint);
                 logResponse(joinPoint, start, response);
             } catch (JsonProcessingException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }).subscriberContext(context -> {
             // the error happens in a different thread, so get the trace from context, set in MDC and downstream to doOnError
@@ -69,7 +69,7 @@ public class LoggerInterceptorConfig {
                 logRequest(joinPoint);
                 logError(joinPoint, start, o.toString());
             } catch (JsonProcessingException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         });
 
@@ -81,14 +81,14 @@ public class LoggerInterceptorConfig {
                 logRequest(joinPoint);
                 logResponse(joinPoint, start, o.toString()); // NOTE: this is costly
             } catch (JsonProcessingException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }).doOnError(o -> {
             try {
                 logRequest(joinPoint);
                 logError(joinPoint, start, o.toString());
             } catch (JsonProcessingException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         });
     }

@@ -18,6 +18,8 @@ public interface UserService extends CrudService {
     Mono setUserData(Long id, UserRequestPatch updatedUser);
 
     Mono<UserEntity> findByEmail(String email);
+
+    Mono<Long> countByIsActivated(boolean isActivated);
 }
 
 

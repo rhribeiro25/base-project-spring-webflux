@@ -31,18 +31,23 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final MessageSource messageSource;
-
-    private final PasswordEncoder encoder;
+    @Autowired
+    private MessageSource messageSource;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private GenericConverter genericConverter;
 
     @Autowired
     private BlackListRepository blackListRepository;
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     public Mono generateToken(UserRequestLogin user) {
         return userService.findByEmail(user.getEmail()).map(userDb -> {
@@ -60,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
         return blackListRepository.existsByToken(auth.getToken()).flatMap(exists -> {
             if (!exists)
                 return blackListRepository.save(auth)
-                        .flatMap(token -> GenericConverter.converterMonoToObjectResponse(
+                        .flatMap(token -> genericConverter.converterMonoToObjectResponse(
                                         Mono.just(messageSource.getMessage("message.token.blocked.successfully", null, Locale.getDefault())), HttpStatus.OK
                                 )
                         );

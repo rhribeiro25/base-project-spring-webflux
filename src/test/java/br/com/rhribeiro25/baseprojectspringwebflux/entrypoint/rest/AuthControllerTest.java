@@ -35,16 +35,14 @@ public class AuthControllerTest {
     @BeforeEach
     public void setUp() {
 
-        BDDMockito.mock(AuthController.class);
-
-        BDDMockito.given(authService.generateToken(userRequestLogin))
-                .willReturn(Mono.just(ObjectResponse.builder()
+        BDDMockito.when(authService.generateToken(userRequestLogin))
+                .thenReturn(Mono.just(ObjectResponse.builder()
                         .data("")
                         .statusCode(200)
                         .build()));
 
-        BDDMockito.given(authService.saveTokenInBlacklist(authDocument))
-                .willReturn(Mono.just(ObjectResponse.builder()
+        BDDMockito.when(authService.saveTokenInBlacklist(authDocument))
+                .thenReturn(Mono.just(ObjectResponse.builder()
                         .data("Token bloqueado com sucesso!")
                         .statusCode(200)
                         .build()));
