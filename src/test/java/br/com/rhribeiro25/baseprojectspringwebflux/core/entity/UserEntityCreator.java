@@ -22,6 +22,23 @@ public class UserEntityCreator {
                 .build();
     }
 
+    public static UserEntity createUserEntityDeleted() {
+        return UserEntity.builder()
+                .id(1L)
+                .isActivated(false)
+                .firstName("Jeferson")
+                .middleName("Oliveira")
+                .lastName("Neto")
+                .motherName("Maria de Lourdes Oliveira")
+                .email("email@gmail.com.br")
+                .password("1234%sS")
+                .phone("11999999999")
+                .role("ADMIN")
+                .createdAt(LocalDateTime.of(2022, 03, 11, 9, 30, 0))
+                .updatedAt(LocalDateTime.of(2022, 03, 11, 9, 30, 0))
+                .build();
+    }
+
     public static List<UserEntity> createUserEntityList() {
         return Arrays.asList(
                 UserEntity.builder()

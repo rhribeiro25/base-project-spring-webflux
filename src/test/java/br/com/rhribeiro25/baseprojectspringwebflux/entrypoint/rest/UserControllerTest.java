@@ -12,7 +12,7 @@ import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.Pa
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.PaginatorResponseCreator;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntityCreator;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.UserService;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.UserServiceImpl;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.generic.GenericConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith(SpringExtension.class)
@@ -40,7 +39,7 @@ public class UserControllerTest {
     private UserController userController;
 
     @Mock
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Mock
     private GenericConverter genericConverter;
@@ -51,8 +50,8 @@ public class UserControllerTest {
     private final UserResponse userResponse = UserResponseCreator.createUserResponse();
     private final ObjectResponse objectResponse = ObjectResponseCreator.createObjectResponse(userResponse, HttpStatus.OK);
     private final ObjectResponse objectResponseCreated = ObjectResponseCreator.createObjectResponse(userResponse, HttpStatus.CREATED);
-    private final ObjectResponse objectResponseDeleted = ObjectResponseCreator.createObjectResponse("Usuário deletado com sucesso!", HttpStatus.CREATED);
-    private final List<UserEntity> userEntityList = UserEntityCreator.createUserEntityList();
+    private final UserEntity userEntity = UserEntityCreator.createUserEntity();
+    private final UserEntity userEntityDeleted = UserEntityCreator.createUserEntityDeleted();
     private final List<UserResponse> userResponseList = UserResponseCreator.createUserResponseList();
     private final PaginatorResponse paginatorResponse = PaginatorResponseCreator.createPaginatorResponse(userResponseList);
     private final UserRequestPatch userRequestPatch = UserRequestCreator.createUserRequestPatch();
@@ -66,32 +65,43 @@ public class UserControllerTest {
 
         genericConverter.modelMapper = new ModelMapper();
 
+        // findById
         BDDMockito.when(userService.findById(1L))
                 .thenReturn(Mono.just(userResponse));
-
         BDDMockito.when(genericConverter.converterMonoToObjectResponse(userService.findById(1L), HttpStatus.OK))
                 .thenReturn(Mono.just(objectResponse));
 
+        // findAll
         BDDMockito.when(userService.findAll(pageRequest))
                 .thenReturn(Flux.fromIterable(userResponseList));
-
         BDDMockito.when(userService.countByIsActivated(true))
                 .thenReturn(Mono.just(2L));
-
         BDDMockito.when(genericConverter.converterFluxToPaginatorResponse(userService.findAll(pageRequest), pageRequest, userService.countByIsActivated(true)))
                 .thenReturn(Mono.just(paginatorResponse));
 
+        // save
         BDDMockito.when(userService.save(userRequestPost))
+                .thenReturn(Mono.just(userEntity));
+        BDDMockito.when(genericConverter.converterMonoToObjectResponse(userService.save(userRequestPost), HttpStatus.CREATED))
                 .thenReturn(Mono.just(objectResponseCreated));
 
+        // updateByPut
         BDDMockito.when(userService.updateByPut(userRequestPut))
                 .thenReturn(Mono.just(objectResponse));
-
-        BDDMockito.when(userService.updateByPatch(1L, userRequestPatch))
+        BDDMockito.when(genericConverter.converterMonoToObjectResponse(userService.updateByPut(userRequestPut), HttpStatus.OK))
                 .thenReturn(Mono.just(objectResponse));
 
+        // updateByPatch
+        BDDMockito.when(userService.updateByPatch(1L, userRequestPatch))
+                .thenReturn(Mono.just(objectResponse));
+        BDDMockito.when(genericConverter.converterMonoToObjectResponse(userService.updateByPatch(1L, userRequestPatch), HttpStatus.OK))
+                .thenReturn(Mono.just(objectResponse));
+
+        // delete
         BDDMockito.when(userService.delete(1L))
-                .thenReturn(Mono.just(objectResponseDeleted));
+                .thenReturn(Mono.just(userEntityDeleted));
+        BDDMockito.when(genericConverter.converterMonoToObjectResponse(userService.delete(1L), HttpStatus.OK))
+                .thenReturn(Mono.just(userEntityDeleted));
     }
 
     @Test
@@ -148,10 +158,9 @@ public class UserControllerTest {
     @DisplayName("delete User -> Success With Result")
     public void deleteUserSucessWithResult() {
         Mono result = userController.delete(1l);
-
         StepVerifier.create(result)
                 .expectSubscription()
-                .expectNext(objectResponseDeleted)
+                .expectNext(userEntityDeleted)
                 .verifyComplete();
     }
 }

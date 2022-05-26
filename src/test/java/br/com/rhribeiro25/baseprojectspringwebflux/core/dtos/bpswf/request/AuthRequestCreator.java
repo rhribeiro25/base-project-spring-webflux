@@ -6,7 +6,7 @@ public class AuthRequestCreator {
 
     public static UserRequestLogin createUserRequestLogin() {
         return UserRequestLogin.builder()
-                .email("email@dasa.com.br")
+                .email("email@gmail.com.br")
                 .password("1234%sS")
                 .build();
     }

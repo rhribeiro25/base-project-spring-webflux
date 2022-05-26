@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    public Mono<Long> countByIsActivated(boolean isActivated){
+    public Mono<Long> countByIsActivated(boolean isActivated) {
         return userRepository.countByIsActivated(true);
     }
 
@@ -70,23 +70,19 @@ public class UserServiceImpl implements UserService {
     public Mono save(Object obj) {
         return verifyUserByEmailOrActivateUser((UserRequestPost) obj).switchIfEmpty(Mono.defer(() -> {
             UserEntity user = genericConverter.converterObjectToObject(obj, UserEntity.class);
-            Mono<UserResponse> userResponse = this.persisteUser(user);
-            return genericConverter.converterMonoToObjectResponse(userResponse, HttpStatus.CREATED);
+            return this.persisteUser(user);
         }));
     }
 
     @Transactional
     public Mono updateByPut(Object updatedUser) {
         return userRepository.findByIdAndIsActivated(((UserRequestPut) updatedUser).getId(), true).flatMap(oldUser -> {
-
             if (!oldUser.getEmail().equals(((UserRequestPut) updatedUser).getEmail()))
                 return Mono.error(new BadRequestErrorException(
                         messageSource.getMessage("message.bad.request.error.email", null, Locale.getDefault()))
                 );
-
             UserEntity user = genericConverter.converterObjectToObject(updatedUser, UserEntity.class);
-            Mono<UserResponse> userResponse = this.persisteUser(user);
-            return genericConverter.converterMonoToObjectResponse(userResponse, HttpStatus.OK);
+            return this.persisteUser(user);
         }).switchIfEmpty(Mono.error(new BadRequestErrorException(
                 messageSource.getMessage("message.bad.request.error.find.user", null, Locale.getDefault())))
         );
@@ -94,10 +90,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public Mono updateByPatch(Long id, Object updatedUser) {
-        return setUserData(id, ((UserRequestPatch) updatedUser)).flatMap(oldUser -> {
-            Mono<UserResponse> userResponse = this.persisteUser(oldUser);
-            return genericConverter.converterMonoToObjectResponse(userResponse, HttpStatus.OK);
-        }).switchIfEmpty(Mono.error(new BadRequestErrorException(
+        return setUserData(id, ((UserRequestPatch) updatedUser)).flatMap(oldUser ->
+                this.persisteUser(oldUser)
+        ).switchIfEmpty(Mono.error(new BadRequestErrorException(
                 messageSource.getMessage("message.bad.request.error.find.user", null, Locale.getDefault())))
         );
     }
@@ -106,11 +101,7 @@ public class UserServiceImpl implements UserService {
     public Mono delete(Long id) {
         return userRepository.findByIdAndIsActivated(id, true).flatMap(oldUser -> {
             oldUser.setIsActivated(false);
-            return userRepository.save(oldUser)
-                    .flatMap(deletedUser -> genericConverter.converterMonoToObjectResponse(
-                                    Mono.just(messageSource.getMessage("message.user.deleted.successfully", null, Locale.getDefault())), HttpStatus.OK
-                            )
-                    );
+            return userRepository.save(oldUser);
         }).switchIfEmpty(Mono.error(new BadRequestErrorException(messageSource.getMessage("message.bad.request.error.find.user", null, Locale.getDefault()))));
     }
 
@@ -125,7 +116,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Mono<UserEntity> setUserData(Long id, UserRequestPatch updatedUser) {
-        return userRepository.findById(id).flatMap(oldUser -> {
+        return userRepository.findByIdAndIsActivated(id, true).flatMap(oldUser -> {
             if (!StringUtils.isNullOrBlank(updatedUser.getFirstName()))
                 oldUser.setFirstName(updatedUser.getFirstName());
             if (!StringUtils.isNullOrBlank(updatedUser.getMiddleName()))
