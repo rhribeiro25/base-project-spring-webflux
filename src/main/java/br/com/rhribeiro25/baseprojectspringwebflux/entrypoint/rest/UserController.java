@@ -81,7 +81,6 @@ public class UserController {
     @DeleteMapping(path = "{id}")
     @ResponseStatus(HttpStatus.OK)
     public Mono delete(@PathVariable Long id) {
-        Mono<UserResponse> userResponse = userService.delete(id);
-        return genericConverter.converterMonoToObjectResponse(messageSource.getMessage("message.user.deleted.successfully", null, Locale.getDefault()), HttpStatus.OK);
+        return userService.delete(id).flatMap(resp -> genericConverter.converterMonoToObjectResponse(messageSource.getMessage("message.user.deleted.successfully", null, Locale.getDefault()), HttpStatus.OK));
     }
 }

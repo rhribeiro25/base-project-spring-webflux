@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     public Mono findById(Long id) {
         return userRepository.findByIdAndIsActivated(id, true).map(user ->
                 genericConverter.converterObjectToObject(user, UserResponse.class)
-        );
+        ).switchIfEmpty(Mono.error(new BadRequestErrorException(messageSource.getMessage("message.bad.request.error.find.user", null, Locale.getDefault()))));
     }
 
     public Flux findAll(Pageable page) {
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public Mono updateByPut(Object updatedUser) {
-        return userRepository.findByIdAndIsActivated(((UserRequestPut) updatedUser).getId(), true).flatMap(oldUser -> {
+        return userRepository.findById(((UserRequestPut) updatedUser).getId()).flatMap(oldUser -> {
             if (!oldUser.getEmail().equals(((UserRequestPut) updatedUser).getEmail()))
                 return Mono.error(new BadRequestErrorException(
                         messageSource.getMessage("message.bad.request.error.email", null, Locale.getDefault()))

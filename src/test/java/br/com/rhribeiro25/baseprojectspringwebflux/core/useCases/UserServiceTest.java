@@ -87,7 +87,7 @@ class UserServiceTest {
                 .thenReturn(userEntity);
 
         // updateByPut
-        BDDMockito.when(userRepository.findByIdAndIsActivated(userRequestPut.getId(), true))
+        BDDMockito.when(userRepository.findById(userRequestPut.getId()))
                 .thenReturn(Mono.just(userEntity));
         BDDMockito.when(genericConverter.converterObjectToObject(userRequestPut, UserEntity.class))
                 .thenReturn(userEntity);
