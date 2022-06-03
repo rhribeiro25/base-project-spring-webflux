@@ -4,6 +4,7 @@ import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @Component
 @Log4j2
+@Data
 public class JwtUtil {
 
     @Value("${jwt.secret}")

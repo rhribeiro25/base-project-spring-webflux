@@ -62,14 +62,10 @@ public class GenericConverter {
                 .build())));
     }
 
-    public Mono converterMonoToObjectResponse(Mono monoObject, HttpStatus status) {
-        return monoObject.map(object -> ObjectResponse.builder()
+    public Mono converterMonoToObjectResponse(Object object, HttpStatus status) {
+        return Mono.just(ObjectResponse.builder()
                         .statusCode(status.value())
                         .data(object)
-                        .build())
-                .switchIfEmpty(Mono.just(ObjectResponse.builder()
-                        .statusCode(status.value())
-                        .data(null)
-                        .build()));
+                        .build());
     }
 }

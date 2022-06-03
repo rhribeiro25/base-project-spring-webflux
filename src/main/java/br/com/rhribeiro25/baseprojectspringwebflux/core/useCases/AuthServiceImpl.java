@@ -56,21 +56,19 @@ public class AuthServiceImpl implements AuthService {
             headers.set("Authorization", jwtUtil.generateToken(userDb));
 
             if (encoder.matches(user.getPassword(), userDb.getPassword()))
-                return new ResponseEntity<>(headers, HttpStatus.OK);
-            else return Mono.empty();
-        }).switchIfEmpty(Mono.error(new ForbiddenErrorException(messageSource.getMessage("message.forbidden.error.incorrect.credentials", null, Locale.getDefault()))));
+                return headers;
+            else
+                return Mono.error(new ForbiddenErrorException(messageSource.getMessage("message.forbidden.error.incorrect.credentials", null, Locale.getDefault())));
+        });
     }
+
 
     public Mono saveTokenInBlacklist(AuthDocument auth) {
         return blackListRepository.existsByToken(auth.getToken()).flatMap(exists -> {
             if (!exists)
-                return blackListRepository.save(auth)
-                        .flatMap(token -> genericConverter.converterMonoToObjectResponse(
-                                        Mono.just(messageSource.getMessage("message.token.blocked.successfully", null, Locale.getDefault())), HttpStatus.OK
-                                )
-                        );
-            else return Mono.empty();
-        }).switchIfEmpty(Mono.error(new BadRequestErrorException(messageSource.getMessage("message.bad.request.error.find.token", null, Locale.getDefault()))));
+                return blackListRepository.save(auth);
+            else return Mono.error(new BadRequestErrorException(messageSource.getMessage("message.bad.request.error.find.token", null, Locale.getDefault())));
+        });
     }
 
 }

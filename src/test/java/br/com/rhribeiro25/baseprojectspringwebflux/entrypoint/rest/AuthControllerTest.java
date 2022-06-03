@@ -4,7 +4,11 @@ import br.com.rhribeiro25.baseprojectspringwebflux.core.document.AuthDocument;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.AuthRequestCreator;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestLogin;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.ObjectResponse;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.AuthService;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.ObjectResponseCreator;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntity;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.UserEntityCreator;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.AuthServiceImpl;
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.generic.GenericConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,11 +16,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @ExtendWith(SpringExtension.class)
@@ -26,26 +34,37 @@ public class AuthControllerTest {
     private AuthController authController;
 
     @Mock
-    private AuthService authService;
+    private AuthServiceImpl authService;
+
+    @Mock
+    private GenericConverter genericConverter;
+
+    @Mock
+    private MessageSource messageSource;
 
     private final UserRequestLogin userRequestLogin = AuthRequestCreator.createUserRequestLogin();
     private final AuthDocument authDocument = AuthRequestCreator.createAuthDocument();
+    private final UserEntity userEntity = UserEntityCreator.createUserEntity();
+    private final ObjectResponse objectResponse = ObjectResponseCreator.createObjectResponse("Token bloqueado com sucesso!", HttpStatus.OK);
+    private final ObjectResponse objectResponseToken = ObjectResponseCreator.createObjectResponse("token", HttpStatus.OK);
+    private HttpHeaders headers = new HttpHeaders();
 
 
     @BeforeEach
     public void setUp() {
 
+        headers.set("Authorization", "token");
+        BDDMockito.when(genericConverter.converterMonoToObjectResponse(headers, HttpStatus.OK))
+                .thenReturn(Mono.just(objectResponseToken));
         BDDMockito.when(authService.generateToken(userRequestLogin))
-                .thenReturn(Mono.just(ObjectResponse.builder()
-                        .data("")
-                        .statusCode(200)
-                        .build()));
+                .thenReturn(Mono.just(headers));
 
+        BDDMockito.when(messageSource.getMessage("message.token.blocked.successfully", null, Locale.getDefault()))
+                .thenReturn("Token bloqueado com sucesso!");
+        BDDMockito.when(genericConverter.converterMonoToObjectResponse(messageSource.getMessage("message.token.blocked.successfully", null, Locale.getDefault()), HttpStatus.OK))
+                .thenReturn(Mono.just(objectResponse));
         BDDMockito.when(authService.saveTokenInBlacklist(authDocument))
-                .thenReturn(Mono.just(ObjectResponse.builder()
-                        .data("Token bloqueado com sucesso!")
-                        .statusCode(200)
-                        .build()));
+                .thenReturn(Mono.just(userEntity));
     }
 
     @Test
@@ -54,10 +73,7 @@ public class AuthControllerTest {
         Mono result = authController.login(userRequestLogin);
         StepVerifier.create(result)
                 .expectSubscription()
-                .expectNext(ObjectResponse.builder()
-                        .data("")
-                        .statusCode(200)
-                        .build())
+                .expectNext(objectResponseToken)
                 .verifyComplete();
     }
 
@@ -70,10 +86,7 @@ public class AuthControllerTest {
         Mono result = authController.logout(headers);
         StepVerifier.create(result)
                 .expectSubscription()
-                .expectNext(ObjectResponse.builder()
-                        .data("Token bloqueado com sucesso!")
-                        .statusCode(200)
-                        .build())
+                .expectNext(objectResponse)
                 .verifyComplete();
     }
 

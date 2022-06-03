@@ -18,7 +18,6 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,7 +29,6 @@ import reactor.test.StepVerifier;
 import java.util.List;
 
 @ExtendWith(SpringExtension.class)
-@AutoConfigureWebTestClient(timeout = "20000")
 class UserServiceTest {
 
     @InjectMocks
