@@ -4,6 +4,7 @@ import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserR
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPost;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.request.UserRequestPut;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.bpswf.response.UserResponse;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.generic.response.ObjectResponse;
 import br.com.rhribeiro25.baseprojectspringwebflux.core.useCases.UserService;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.generic.GenericConverter;
 import org.springframework.context.MessageSource;
@@ -43,8 +44,8 @@ public class UserController {
 
     @GetMapping(path = "{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono findById(@PathVariable Long id) {
-        return genericConverter.converterMonoToObjectResponse(userService.findById(id), HttpStatus.OK);
+    public Mono<ObjectResponse> findById(@PathVariable Long id) {
+        return userService.findById(id).flatMap(user -> genericConverter.converterMonoToObjectResponse(user, HttpStatus.OK));
     }
 
     @GetMapping
@@ -60,27 +61,27 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono save(@RequestBody @Valid UserRequestPost user) {
         Mono<UserResponse> userResponse = userService.save(user);
-        return genericConverter.converterMonoToObjectResponse(userResponse, HttpStatus.CREATED);
+        return userResponse.flatMap(userResp -> genericConverter.converterMonoToObjectResponse(userResp, HttpStatus.CREATED));
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public Mono updateByPut(@RequestBody @Valid UserRequestPut user) {
         Mono<UserResponse> userResponse = userService.updateByPut(user);
-        return genericConverter.converterMonoToObjectResponse(userResponse, HttpStatus.OK);
+        return userResponse.flatMap(userResp -> genericConverter.converterMonoToObjectResponse(userResp, HttpStatus.OK));
     }
 
     @PatchMapping(path = "{id}")
     @ResponseStatus(HttpStatus.OK)
     public Mono updateByPatch(@PathVariable Long id, @RequestBody @Valid UserRequestPatch user) {
         Mono<UserResponse> userResponse = userService.updateByPatch(id, user);
-        return genericConverter.converterMonoToObjectResponse(userResponse, HttpStatus.OK);
+        return userResponse.flatMap(userResp -> genericConverter.converterMonoToObjectResponse(userResp, HttpStatus.OK));
     }
 
     @DeleteMapping(path = "{id}")
     @ResponseStatus(HttpStatus.OK)
     public Mono delete(@PathVariable Long id) {
         Mono<UserResponse> userResponse = userService.delete(id);
-        return genericConverter.converterMonoToObjectResponse(userResponse, HttpStatus.OK);
+        return genericConverter.converterMonoToObjectResponse(messageSource.getMessage("message.user.deleted.successfully", null, Locale.getDefault()), HttpStatus.OK);
     }
 }

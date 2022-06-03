@@ -49,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private PasswordEncoder encoder;
 
-    public Mono generateToken(UserRequestLogin user) {
+    public Mono<HttpHeaders> generateToken(UserRequestLogin user) {
         return userService.findByEmail(user.getEmail()).map(userDb -> {
 
             HttpHeaders headers = new HttpHeaders();
@@ -58,7 +58,11 @@ public class AuthServiceImpl implements AuthService {
             if (encoder.matches(user.getPassword(), userDb.getPassword()))
                 return headers;
             else
-                return Mono.error(new ForbiddenErrorException(messageSource.getMessage("message.forbidden.error.incorrect.credentials", null, Locale.getDefault())));
+                try {
+                    throw new ForbiddenErrorException(messageSource.getMessage("message.forbidden.error.incorrect.credentials", null, Locale.getDefault()));
+                } catch (ForbiddenErrorException e) {
+                    throw new RuntimeException(e);
+                }
         });
     }
 

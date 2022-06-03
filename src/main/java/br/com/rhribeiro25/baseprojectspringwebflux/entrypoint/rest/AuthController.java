@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -40,9 +41,9 @@ public class AuthController {
     private MessageSource messageSource;
 
     @PostMapping("/login")
-    public Mono login(@RequestBody UserRequestLogin user) {
-        Mono headersMono = authService.generateToken(user);
-        return headersMono.flatMap(headers -> genericConverter.converterMonoToObjectResponse(headers, HttpStatus.OK));
+    public Mono<ResponseEntity> login(@RequestBody UserRequestLogin user) {
+        Mono<HttpHeaders> headersMono = authService.generateToken(user);
+        return headersMono.map(headers -> new ResponseEntity<>(headers, HttpStatus.OK));
     }
 
     @PostMapping("/logout")

@@ -31,6 +31,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.List;
+import java.util.Locale;
 
 @ExtendWith(SpringExtension.class)
 public class UserControllerTest {
@@ -50,8 +51,8 @@ public class UserControllerTest {
     private final UserResponse userResponse = UserResponseCreator.createUserResponse();
     private final ObjectResponse objectResponse = ObjectResponseCreator.createObjectResponse(userResponse, HttpStatus.OK);
     private final ObjectResponse objectResponseCreated = ObjectResponseCreator.createObjectResponse(userResponse, HttpStatus.CREATED);
+    private final ObjectResponse objectResponseDeleted = ObjectResponseCreator.createObjectResponse("Usuário(a) deletado(a) com sucesso!", HttpStatus.CREATED);
     private final UserEntity userEntity = UserEntityCreator.createUserEntity();
-    private final UserEntity userEntityDeleted = UserEntityCreator.createUserEntityDeleted();
     private final List<UserResponse> userResponseList = UserResponseCreator.createUserResponseList();
     private final PaginatorResponse paginatorResponse = PaginatorResponseCreator.createPaginatorResponse(userResponseList);
     private final UserRequestPatch userRequestPatch = UserRequestCreator.createUserRequestPatch();
@@ -67,8 +68,8 @@ public class UserControllerTest {
 
         // findById
         BDDMockito.when(userService.findById(1L))
-                .thenReturn(Mono.just(userResponse));
-        BDDMockito.when(genericConverter.converterMonoToObjectResponse(userService.findById(1L), HttpStatus.OK))
+                .thenReturn(Mono.just(userEntity));
+        BDDMockito.when(genericConverter.converterMonoToObjectResponse(userEntity, HttpStatus.OK))
                 .thenReturn(Mono.just(objectResponse));
 
         // findAll
@@ -81,27 +82,27 @@ public class UserControllerTest {
 
         // save
         BDDMockito.when(userService.save(userRequestPost))
-                .thenReturn(Mono.just(userEntity));
-        BDDMockito.when(genericConverter.converterMonoToObjectResponse(userService.save(userRequestPost), HttpStatus.CREATED))
+                .thenReturn(Mono.just(userResponse));
+        BDDMockito.when(genericConverter.converterMonoToObjectResponse(userResponse, HttpStatus.CREATED))
                 .thenReturn(Mono.just(objectResponseCreated));
 
         // updateByPut
         BDDMockito.when(userService.updateByPut(userRequestPut))
-                .thenReturn(Mono.just(objectResponse));
-        BDDMockito.when(genericConverter.converterMonoToObjectResponse(userService.updateByPut(userRequestPut), HttpStatus.OK))
+                .thenReturn(Mono.just(userResponse));
+        BDDMockito.when(genericConverter.converterMonoToObjectResponse(userResponse, HttpStatus.OK))
                 .thenReturn(Mono.just(objectResponse));
 
         // updateByPatch
         BDDMockito.when(userService.updateByPatch(1L, userRequestPatch))
-                .thenReturn(Mono.just(objectResponse));
-        BDDMockito.when(genericConverter.converterMonoToObjectResponse(userService.updateByPatch(1L, userRequestPatch), HttpStatus.OK))
+                .thenReturn(Mono.just(userResponse));
+        BDDMockito.when(genericConverter.converterMonoToObjectResponse(userResponse, HttpStatus.OK))
                 .thenReturn(Mono.just(objectResponse));
 
         // delete
         BDDMockito.when(userService.delete(1L))
-                .thenReturn(Mono.just(userEntityDeleted));
-        BDDMockito.when(genericConverter.converterMonoToObjectResponse(userService.delete(1L), HttpStatus.OK))
-                .thenReturn(Mono.just(userEntityDeleted));
+                .thenReturn(Mono.just(userResponse));
+        BDDMockito.when(genericConverter.converterMonoToObjectResponse(messageSource.getMessage("message.user.deleted.successfully", null, Locale.getDefault()), HttpStatus.OK))
+                .thenReturn(Mono.just(objectResponseDeleted));
     }
 
     @Test
@@ -160,7 +161,7 @@ public class UserControllerTest {
         Mono result = userController.delete(1l);
         StepVerifier.create(result)
                 .expectSubscription()
-                .expectNext(userEntityDeleted)
+                .expectNext(objectResponseDeleted)
                 .verifyComplete();
     }
 }

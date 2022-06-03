@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -46,7 +47,7 @@ public class AuthControllerTest {
     private final AuthDocument authDocument = AuthRequestCreator.createAuthDocument();
     private final UserEntity userEntity = UserEntityCreator.createUserEntity();
     private final ObjectResponse objectResponse = ObjectResponseCreator.createObjectResponse("Token bloqueado com sucesso!", HttpStatus.OK);
-    private final ObjectResponse objectResponseToken = ObjectResponseCreator.createObjectResponse("token", HttpStatus.OK);
+    private ResponseEntity responseEntity;
     private HttpHeaders headers = new HttpHeaders();
 
 
@@ -54,8 +55,7 @@ public class AuthControllerTest {
     public void setUp() {
 
         headers.set("Authorization", "token");
-        BDDMockito.when(genericConverter.converterMonoToObjectResponse(headers, HttpStatus.OK))
-                .thenReturn(Mono.just(objectResponseToken));
+        responseEntity = new ResponseEntity(headers, HttpStatus.OK);
         BDDMockito.when(authService.generateToken(userRequestLogin))
                 .thenReturn(Mono.just(headers));
 
@@ -73,7 +73,7 @@ public class AuthControllerTest {
         Mono result = authController.login(userRequestLogin);
         StepVerifier.create(result)
                 .expectSubscription()
-                .expectNext(objectResponseToken)
+                .expectNext(responseEntity)
                 .verifyComplete();
     }
 

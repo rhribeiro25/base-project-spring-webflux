@@ -34,7 +34,7 @@ public class AddressServiceImpl implements AddressService {
     private MessageSource messageSource;
 
     public Mono findAddressByZipcode(String cep) {
-        return genericConverter.converterMonoToObjectResponse(viaCepWebClient.findAddressByZipcode(cep), HttpStatus.OK)
+        return viaCepWebClient.findAddressByZipcode(cep)
                 .switchIfEmpty(Mono.error(new NotFoundErrorException(messageSource.getMessage("message.not.found.error.address", null, Locale.getDefault()))));
     }
 }
