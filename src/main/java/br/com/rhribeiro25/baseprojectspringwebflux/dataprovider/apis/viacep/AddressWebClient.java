@@ -26,6 +26,9 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class AddressWebClient {
 
+    @Autowired
+    private AddressConverter addressConverter;
+
     private final WebClient webClient;
 
     private String API_BASE_URL;
@@ -51,7 +54,7 @@ public class AddressWebClient {
                 .build();
     }
 
-    public Mono findAddressByZipcode(String cep) {
+    public Mono findAddressByZipCode(String cep) {
         Mono<VcAddressResponse> dpExamPreparationsResponse = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("ws/{cep}/json")
@@ -59,6 +62,6 @@ public class AddressWebClient {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(VcAddressResponse.class);
-        return AddressConverter.converterVcAddressResponseToAddressResponse(dpExamPreparationsResponse);
+        return addressConverter.converterVcAddressResponseToAddressResponse(dpExamPreparationsResponse);
     }
 }

@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -33,8 +32,8 @@ public class AddressServiceImpl implements AddressService {
     @Autowired
     private MessageSource messageSource;
 
-    public Mono findAddressByZipcode(String cep) {
-        return viaCepWebClient.findAddressByZipcode(cep)
+    public Mono findAddressByZipCode(String cep) {
+        return viaCepWebClient.findAddressByZipCode(cep)
                 .switchIfEmpty(Mono.error(new NotFoundErrorException(messageSource.getMessage("message.not.found.error.address", null, Locale.getDefault()))));
     }
 }

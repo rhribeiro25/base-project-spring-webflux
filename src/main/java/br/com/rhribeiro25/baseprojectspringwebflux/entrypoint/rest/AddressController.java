@@ -29,6 +29,6 @@ public class AddressController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Mono findAddressByZipCode(@RequestParam @CepConstraint String cep) {
-        return addressService.findAddressByZipcode(cep).flatMap(address -> genericConverter.converterMonoToObjectResponse(address, HttpStatus.OK));
+        return addressService.findAddressByZipCode(cep).flatMap(address -> genericConverter.converterMonoToObjectResponse(address, HttpStatus.OK));
     }
 }

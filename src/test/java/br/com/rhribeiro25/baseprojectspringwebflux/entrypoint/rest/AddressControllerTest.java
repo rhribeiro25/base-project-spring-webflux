@@ -37,7 +37,7 @@ public class AddressControllerTest {
     @BeforeEach
     public void setUp() {
 
-        BDDMockito.when(addressService.findAddressByZipcode("37500-000"))
+        BDDMockito.when(addressService.findAddressByZipCode("014515-055"))
                 .thenReturn(Mono.just(address));
         BDDMockito.when(genericConverter.converterMonoToObjectResponse(address, HttpStatus.OK))
                 .thenReturn(Mono.just(objectResponse));
@@ -46,7 +46,7 @@ public class AddressControllerTest {
     @Test
     @DisplayName("find Address by cep -> Success With Result")
     public void findAddressByCepSucessWithResult() {
-        Mono result = addressController.findAddressByZipCode("37500-000");
+        Mono result = addressController.findAddressByZipCode("014515-055");
         StepVerifier.create(result)
                 .expectSubscription()
                 .expectNext(objectResponse)

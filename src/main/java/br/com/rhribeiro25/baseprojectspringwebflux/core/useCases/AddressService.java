@@ -10,5 +10,5 @@ import reactor.core.publisher.Mono;
  */
 public interface AddressService {
 
-    Mono findAddressByZipcode(String cep);
+    Mono findAddressByZipCode(String cep);
 }
