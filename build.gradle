@@ -7,7 +7,7 @@ plugins {
 }
 
 ext {
-    appVersion = 'v1.1.1'
+    appVersion = 'v1.1.2'
     validatorVersion = '1.7'
     contextVersion = '4.3.10.RELEASE'
     openapiVersion = '1.5.2'
