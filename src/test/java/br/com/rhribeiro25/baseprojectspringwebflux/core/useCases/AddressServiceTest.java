@@ -1,7 +1,7 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.AddressEntity;
-import br.com.rhribeiro25.baseprojectspringwebflux.core.entity.AddressEntityCreator;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.viacep.response.AddressResponse;
+import br.com.rhribeiro25.baseprojectspringwebflux.core.dtos.viacep.response.AddressResponseCreator;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.viacep.AddressConverter;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viacep.AddressWebClient;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viacep.dtos.response.VcAddressResponse;
@@ -33,16 +33,16 @@ public class AddressServiceTest {
     @Mock
     private MessageSource messageSource;
 
-    private final AddressEntity addressEntity = AddressEntityCreator.createAddressEntity();
     private final VcAddressResponse vcAddressResponse = VcAddressResponseCreator.createVcAddressResponse();
+    private static final AddressResponse addressResponse = AddressResponseCreator.createAddressResponse();
 
     @BeforeEach
     public void setUp() {
 
+        BDDMockito.when(addressConverter.converterVcAddressResponseToAddressResponse(vcAddressResponse))
+                .thenReturn(Mono.just(addressResponse));
         BDDMockito.when(addressWebClient.findAddressByZipCode("014515-055"))
-                .thenReturn(Mono.just(addressEntity));
-        BDDMockito.when(addressConverter.converterVcAddressResponseToAddressResponse(Mono.just(vcAddressResponse)))
-                .thenReturn(Mono.just(addressEntity));
+                .thenReturn(Mono.just(vcAddressResponse));
     }
 
     @Test
@@ -51,7 +51,7 @@ public class AddressServiceTest {
         Mono result = addressService.findAddressByZipCode("014515-055");
         StepVerifier.create(result)
                 .expectSubscription()
-                .expectNext(addressEntity)
+                .expectNext(addressResponse)
                 .verifyComplete();
     }
 

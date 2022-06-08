@@ -1,7 +1,8 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.core.useCases;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.generic.GenericConverter;
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.viacep.AddressConverter;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viacep.AddressWebClient;
+import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viacep.dtos.response.VcAddressResponse;
 import br.com.rhribeiro25.baseprojectspringwebflux.error.exception.NotFoundErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,16 +25,18 @@ import java.util.Locale;
 public class AddressServiceImpl implements AddressService {
 
     @Autowired
-    private AddressWebClient viaCepWebClient;
+    private final AddressWebClient viaCepWebClient;
 
     @Autowired
-    private GenericConverter genericConverter;
+    private final AddressConverter addressConverter;
 
     @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
     public Mono findAddressByZipCode(String cep) {
-        return viaCepWebClient.findAddressByZipCode(cep)
-                .switchIfEmpty(Mono.error(new NotFoundErrorException(messageSource.getMessage("message.not.found.error.address", null, Locale.getDefault()))));
+        return viaCepWebClient.findAddressByZipCode(cep).flatMap(res ->
+                        addressConverter.converterVcAddressResponseToAddressResponse((VcAddressResponse) res)
+                ).switchIfEmpty(Mono.error(new NotFoundErrorException(messageSource.getMessage("message.not.found.error.address", null, Locale.getDefault()))));
+
     }
 }

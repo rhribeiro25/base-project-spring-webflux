@@ -1,6 +1,5 @@
 package br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viacep;
 
-import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.adapter.viacep.AddressConverter;
 import br.com.rhribeiro25.baseprojectspringwebflux.dataprovider.apis.viacep.dtos.response.VcAddressResponse;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
@@ -26,16 +25,14 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class AddressWebClient {
 
-    @Autowired
-    private AddressConverter addressConverter;
-
     private final WebClient webClient;
 
     private String API_BASE_URL;
 
     @Autowired
     public AddressWebClient(Environment env) {
-        this.API_BASE_URL = "http://viacep.com.br/";
+
+        this.API_BASE_URL = env.getProperty("api.viacep.base.url");
 
         HttpClient httpClient = HttpClient
                 .create()
@@ -55,13 +52,12 @@ public class AddressWebClient {
     }
 
     public Mono findAddressByZipCode(String cep) {
-        Mono<VcAddressResponse> dpExamPreparationsResponse = webClient.get()
+        return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("ws/{cep}/json")
                         .build(cep))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(VcAddressResponse.class);
-        return addressConverter.converterVcAddressResponseToAddressResponse(dpExamPreparationsResponse);
     }
 }

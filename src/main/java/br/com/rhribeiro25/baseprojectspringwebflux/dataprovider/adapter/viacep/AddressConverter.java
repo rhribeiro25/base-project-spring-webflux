@@ -16,13 +16,13 @@ import reactor.core.publisher.Mono;
 @Component
 public class AddressConverter {
 
-    public Mono converterVcAddressResponseToAddressResponse(Mono<VcAddressResponse> vcAddressResponse) {
-        return vcAddressResponse.flatMap(response -> Mono.just(AddressResponse.builder()
-                .zipCode(response.getCep())
-                .street(response.getLogradouro())
-                .complement(response.getComplemento())
-                .district(response.getBairro())
-                .city(response.getLocalidade())
-                .build()));
+    public Mono converterVcAddressResponseToAddressResponse(VcAddressResponse vcAddressResponse) {
+        return Mono.just(AddressResponse.builder()
+                .zipCode(vcAddressResponse.getCep())
+                .street(vcAddressResponse.getLogradouro())
+                .complement(vcAddressResponse.getComplemento())
+                .district(vcAddressResponse.getBairro())
+                .city(vcAddressResponse.getLocalidade())
+                .build());
     }
 }
